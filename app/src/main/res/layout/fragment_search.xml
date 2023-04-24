@@ -1,17 +1,186 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SearchFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="TAB 1"
-        android:gravity="center"
-        android:textColor="@color/black"
-        android:textSize="40dp"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="363dp"
+        android:layout_height="550dp"
+        android:layout_gravity="center"
+        android:background="#000000"
+        tools:context=".fragment_search">
+
+        <TextView
+            android:id="@+id/keyword"
+            android:layout_width="355dp"
+            android:layout_height="31dp"
+            android:layout_marginTop="16dp"
+            android:text="Keyword*"
+            android:textColor="#00FF00"
+            android:textSize="25sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.812"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <AutoCompleteTextView
+            android:id="@+id/editKeyword"
+            android:layout_width="386dp"
+            android:layout_height="59dp"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:hint="Enter the Keyword"
+            android:inputType="textPersonName"
+            android:paddingLeft="5sp"
+            android:paddingTop="5sp"
+            android:paddingRight="5sp"
+            android:paddingBottom="5sp"
+            android:textColor="#ffffff"
+            android:textColorHint="#999999"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/distance"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/keyword" />
+
+        <TextView
+            android:id="@+id/distance"
+            android:layout_width="353dp"
+            android:layout_height="33dp"
+            android:text="Distance (Miles)*"
+            android:textColor="#00FF00"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editKeyword" />
+
+        <EditText
+            android:id="@+id/editDistance"
+            android:layout_width="386dp"
+            android:layout_height="59dp"
+            android:ems="10"
+            android:hint="10"
+            android:inputType="textPersonName"
+            android:paddingLeft="5sp"
+            android:paddingTop="5sp"
+            android:paddingRight="5sp"
+            android:paddingBottom="5sp"
+            android:text="10"
+            android:textColor="#ffffff"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/distance" />
+
+        <TextView
+            android:id="@+id/category"
+            android:layout_width="357dp"
+            android:layout_height="33dp"
+            android:text="Category*"
+            android:textColor="#00FF00"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editDistance" />
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="388dp"
+            android:layout_height="41dp"
+            android:layout_marginTop="8dp"
+            android:entries="@array/spinner_values"
+            android:spinnerMode="dropdown"
+            android:textColor="#ffffff"
+            app:layout_constraintBottom_toTopOf="@+id/location"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/category" />
+
+        <TextView
+            android:id="@+id/location"
+            android:layout_width="165dp"
+            android:layout_height="38dp"
+            android:layout_marginTop="8dp"
+            android:text="Location*"
+            android:textColor="#00FF00"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toStartOf="@+id/switch1"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinner" />
+
+        <Switch
+            android:id="@+id/autoDetect"
+            android:layout_width="160dp"
+            android:layout_height="49dp"
+            android:layout_marginStart="7dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="7dp"
+            android:text="Auto-Detect"
+            android:textColor="#999999"
+            android:textSize="18sp"
+            android:thumbTint="#D3D3D3"
+            android:trackTint="#D3D3D3"
+            app:layout_constraintBottom_toTopOf="@+id/editLocation"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/location"
+            app:layout_constraintTop_toBottomOf="@+id/spinner"
+            app:layout_constraintVertical_bias="0.421" />
+
+        <EditText
+            android:id="@+id/editLocation"
+            android:layout_width="386dp"
+            android:layout_height="59dp"
+            android:ems="10"
+            android:hint="Enter the Location"
+            android:inputType="textPersonName"
+            android:paddingLeft="5sp"
+            android:paddingTop="5sp"
+            android:paddingRight="5sp"
+            android:paddingBottom="5sp"
+            android:textColor="#ffffff"
+            android:textColorHint="#999999"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/location" />
+
+        <Button
+            android:id="@+id/searchButton"
+            android:layout_width="151dp"
+            android:layout_height="63dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="78dp"
+            android:layout_marginBottom="177dp"
+            android:text="Search"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/clearButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editLocation" />
+
+        <Button
+            android:id="@+id/clearButton"
+            android:layout_width="154dp"
+            android:layout_height="61dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="78dp"
+            android:layout_marginEnd="17dp"
+            android:layout_marginBottom="179dp"
+            android:text="Clear"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/searchButton"
+            app:layout_constraintTop_toBottomOf="@+id/editLocation" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
