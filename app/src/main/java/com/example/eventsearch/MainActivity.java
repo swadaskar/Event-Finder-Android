@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TableLayout;
@@ -23,17 +24,17 @@ import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static String lat="";
-    public static String lon="";
+//    public static String lat="";
+//    public static String lon="";
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        setFromIpInfo();
-    }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        setFromIpInfo();
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,42 +52,42 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(vpAdapter);
     }
 
-    public static void setFromIpInfo(){
-        RequestQueue requestQueue;
-        StringRequest stringRequest;
-        String url = "https://ipinfo.io?token=196ec65b0b0406";
-        // RequestQueue initialized
-        requestQueue = Volley.newRequestQueue(this);
+//    public void setFromIpInfo(){
+//        // Instantiate the RequestQueue.
+//        RequestQueue queue = Volley.newRequestQueue(this);
+//        String url = "https://ipinfo.io?token=196ec65b0b0406";
+//
+//        // Request a string response from the provided URL.
+//        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//                        try {
+//                            JSONObject ipInfo = new JSONObject(response);
+//                            //                    the param of String.split accept a regular expression.
+//                            String[] latLon = ipInfo.getString("loc").split(",");
+//                            lat = latLon[0];
+//                            lon = latLon[1];
+//
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Context context = getApplicationContext();
+//                CharSequence text = "Location Not Detected!";
+//                int duration = Toast.LENGTH_SHORT;
+//
+//                Toast toast = Toast.makeText(context, text, duration);
+//                toast.show();
+//            }
+//        });
+//
+//        // Add the request to the RequestQueue.
+//        queue.add(stringRequest);
+//    }
 
-        // String Request initialized
-        stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject jsonIpinfo = new JSONObject(response);
-//                    the param of String.split accept a regular expression.
-                    String[] latLong = jsonIpinfo.getString("loc").split("\\,");
-                    lat = latLong[0];
-                    lon = latLong[1];
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-//                Hide the Location Field
-                location.getText().clear();
-                location.setVisibility(View.INVISIBLE);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                lat = "";
-                lon = "";
-                Toast.makeText(getView().this.getContext(), "Location Not Detected!", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        requestQueue.add(stringRequest);
-
-    }
 }

@@ -1,6 +1,8 @@
 package com.example.eventsearch;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -34,34 +37,40 @@ import java.util.List;
 
 public class SearchFragment extends Fragment {
     // Fragment functioning variables
-    Activity activity = getActivity();
-    public AutoCompleteTextView keyword;
+    public String latlon = "";
+    public AutoCompleteTextView autokeyword;
     public ArrayAdapter<String> autoSuggestAdapter;
     public List<String> keywords = new ArrayList<String>();
     public EditText editDistance;
     public EditText editLocation;
     public Spinner spinner;
     public Switch autoDetect;
+    public Button searchButton;
+    public Button clearButton;
+    public View rootView;
+    public JSONObject searchResults;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_search, container, false);
+        rootView = inflater.inflate(R.layout.fragment_search, container, false);
+
 
         editDistance = rootView.findViewById(R.id.editDistance);
         editLocation = rootView.findViewById(R.id.editLocation);
         autoDetect = rootView.findViewById(R.id.autoDetect);
+        searchButton = rootView.findViewById(R.id.searchButton);
+        clearButton = rootView.findViewById(R.id.clearButton);
 
-
-        // code for autoComplete
+        // ** code for autoComplete
         String[] fruits = {"Apple", "Banana", "Cherry", "Date", "Grape", "Kiwi", "Mango", "Pear"};
         //Creating the instance of ArrayAdapter containing list of fruit names
         autoSuggestAdapter = new ArrayAdapter<>(this.getContext(), android.R.layout.select_dialog_item, keywords);
         //Getting the instance of AutoCompleteTextView
-        keyword = (AutoCompleteTextView) rootView.findViewById(R.id.editKeyword);
-        keyword.setThreshold(1);//will start working from first character
-        keyword.setAdapter(autoSuggestAdapter);//setting the adapter data into the AutoCompleteTextView
-        keyword.addTextChangedListener(new TextWatcher() {
+        autokeyword = (AutoCompleteTextView) rootView.findViewById(R.id.editKeyword);
+        autokeyword.setThreshold(1);//will start working from first character
+        autokeyword.setAdapter(autoSuggestAdapter);//setting the adapter data into the AutoCompleteTextView
+        autokeyword.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //retrieve data s
@@ -71,7 +80,7 @@ public class SearchFragment extends Fragment {
             }
         });
 
-        // code for setting default Spinner
+        // ** code for setting default Spinner
         // set default Spinner Value
         String myString = "All"; //the value you want the position for
         spinner = (Spinner) rootView.findViewById(R.id.spinner);
@@ -82,36 +91,155 @@ public class SearchFragment extends Fragment {
         //set the default according to the value
         spinner.setSelection(spinnerPosition);
 
-        // code for getting location
-        if (!autoDetect.isChecked()){
-            lat = "";
-            lon = "";
-//                    Make location when auto detect is unchecked
-            location.setVisibility(View.VISIBLE);
-        }
-        else{
-            MainActivity.setFromIpInfo();
-        }
+        // ** code for switch auto-detect
+        autoDetect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!autoDetect.isChecked()){
+                    latlon = "";
+                    editLocation.setVisibility(View.VISIBLE);
+                    Utility.toastCheckHelper(rootView.getContext(),"Unchecked");
+                }
+                else{
+                    getIpInfo();
+                    editLocation.getText().clear();
+                    editLocation.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
 
+        // ** code for submit button
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("valid check", String.format("key: %s and loc: %s",autokeyword.getText().toString(),editLocation.getText().toString()));
+                if (autokeyword.getText().toString().isEmpty()){
+                    Utility.toastCheckHelper(rootView.getContext(),"Enter keyword!");
+                } else if (!autoDetect.isChecked() && editLocation.getText().toString().isEmpty()){
+                    Utility.toastCheckHelper(rootView.getContext(),"Enter location!");
+                }else {
+                    if (autoDetect.isChecked()) {
+                        getSearchResults();
+                    } else {
+                        getGoogleCoordinates();
+                    }
+                }
+            }
+        });
 
-
-
-
-
-
-
-
+        clearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                latlon="";
+                autoDetect.setChecked(false);
+                editLocation.setVisibility(View.VISIBLE);
+                editLocation.getText().clear();
+                editDistance.setText("10");
+                autokeyword.setText("");
+//                spinner.setSelection(spinnerPosition);
+//                Log.d("After clearing", String.format("key: %s and loc: %s",autokeyword.getText().toString(),editLocation.getText().toString()));
+            }
+        });
 
 
         // Inflate the layout for this fragment
         return rootView;
     }
+    protected void getSearchResults() {
+        String keyword = autokeyword.getText().toString();
+        String distance = editDistance.getText().toString();
+        String category = "default";
+        switch (spinner.getSelectedItem().toString()) {
+            case "All":
+                category = "default";
+                break;
+            case "Music":
+                category = "music";
+                break;
+            case "Sports":
+                category = "sports";
+                break;
+            case "Arts & Theatre":
+                category = "art";
+                break;
+            case "Film":
+                category = "film";
+                break;
+            case "Miscellaneous":
+                category = "miscellaneous";
+                break;
+        }
+        String url = "https://api-dot-event-search-382200.uc.r.appspot.com//eventsSearch?keyword=" + keyword + "&segmentId=" + category + "&radius=" + distance + "&unit=miles&latlon=" + latlon;
+//        Log.d("inputs", String.format("keyword:%s,category:%s,distance=%s,latlon=%s", keyword, category, distance, latlon));
+        Log.d("input url", url);
+        // Instantiate the RequestQueue.
+        RequestQueue queue = Volley.newRequestQueue(rootView.getContext());
 
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Display the first 500 characters of the response string.
+                        try {
+                            searchResults = new JSONObject(response);
+                            Log.d("results", searchResults.getString("_embedded"));
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("getSearchResults error line 178", "HTTP error: Didn't retrieve search results");
+            }
+        });
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
+
+    protected void getGoogleCoordinates(){
+        String location = editLocation.getText().toString();
+        RequestQueue queue = Volley.newRequestQueue(rootView.getContext());
+        String url = "https://maps.googleapis.com/maps/api/geocode/json?address="+location+"&key=AIzaSyADHRIj3MAMta84N8y0ZqEnNuiAQpZKJSQ";
+        Log.d("geocoding url", url);
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject geocoding = new JSONObject(response);
+                            Log.d("geocoding status", geocoding.getString("status"));
+                            if (!geocoding.getString("status").equals("OK")) {
+                                Utility.toastCheckHelper(rootView.getContext(), "Enter Correct Location");
+                            }
+                            else {
+                                latlon = geocoding.getJSONArray("results").getJSONObject(0).getJSONObject("geometry").getJSONObject("location").getDouble("lat")
+                                        +","+geocoding.getJSONArray("results").getJSONObject(0).getJSONObject("geometry").getJSONObject("location").getDouble("lng");
+//                                Log.d("latlon", String.format("latlon: %s",latlon));
+                                getSearchResults();
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("getGoogleCoordinates error line 213", "HTTP error on getting location");
+            }
+        });
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
     protected void retrieveData(String s){
         RequestQueue requestQueue;
         StringRequest stringRequest;
         // RequestQueue initialized
-        requestQueue = Volley.newRequestQueue(this.getContext());
+        requestQueue = Volley.newRequestQueue(rootView.getContext());
         List<String> items = new ArrayList<String>();
         String text = s.toString();
         String url = "https://api-dot-event-search-382200.uc.r.appspot.com//autoSuggest?keyword="+text;
@@ -132,16 +260,16 @@ public class SearchFragment extends Fragment {
                         items.add(" ");
                     }
 
-                    autoSuggestAdapter = new ArrayAdapter<String>(SearchFragment.this.getContext(), android.R.layout.select_dialog_item, items);
+                    autoSuggestAdapter = new ArrayAdapter<String>(rootView.getContext(), android.R.layout.select_dialog_item, items);
                     keywords = items;
                     Log.d("auto", keywords.toString());
 //                    autocompleteAdapter.notifyDataSetChanged();
 //                    keyword.setAdapter(autocompleteAdapter);
-                    keyword.setThreshold(1);
+                    autokeyword.setThreshold(1);
 
 //                    final Handler handler = new Handler(Looper.getMainLooper());
 
-                    keyword.setAdapter(autoSuggestAdapter);
+                    autokeyword.setAdapter(autoSuggestAdapter);
                     autoSuggestAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -150,9 +278,40 @@ public class SearchFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(SearchFragment.this.getContext(), "No results found!", Toast.LENGTH_SHORT).show();
+                Log.d("autoSuggestError", "No results found!");
             }
         });
         requestQueue.add(stringRequest);
+    }
+
+
+    protected void getIpInfo(){
+        // Instantiate the RequestQueue.
+        RequestQueue queue = Volley.newRequestQueue(rootView.getContext());
+        String url = "https://ipinfo.io?token=f9416a8146ee1d";
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject ipInfo = new JSONObject(response);
+                            //                    the param of String.split accept a regular expression.
+                            latlon = ipInfo.getString("loc");
+                            Utility.toastCheckHelper(rootView.getContext(), String.format("Location %s",latlon));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Utility.toastCheckHelper(rootView.getContext(), "Location Not Detected!");
+            }
+        });
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
     }
 }
