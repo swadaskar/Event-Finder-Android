@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,12 +15,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -37,6 +41,7 @@ import java.util.List;
 
 public class SearchFragment extends Fragment {
     // Fragment functioning variables
+    private static final String TAG = "SearchFragment";
     public String latlon = "";
     public AutoCompleteTextView autokeyword;
     public ArrayAdapter<String> autoSuggestAdapter;
@@ -49,7 +54,6 @@ public class SearchFragment extends Fragment {
     public Button clearButton;
     public View rootView;
     public JSONObject searchResults;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -80,16 +84,11 @@ public class SearchFragment extends Fragment {
             }
         });
 
-        // ** code for setting default Spinner
-        // set default Spinner Value
-        String myString = "All"; //the value you want the position for
+        // ** code for setting up Spinner
         spinner = (Spinner) rootView.findViewById(R.id.spinner);
-        ArrayAdapter myAdapter = (ArrayAdapter) spinner.getAdapter(); //cast to an ArrayAdapter
-
-        int spinnerPosition = myAdapter.getPosition(myString);
-
-        //set the default according to the value
-        spinner.setSelection(spinnerPosition);
+        ArrayAdapter adapter = ArrayAdapter.createFromResource(rootView.getContext(), R.array.spinner_values, R.layout.spinner_item);
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        spinner.setAdapter(adapter);
 
         // ** code for switch auto-detect
         autoDetect.setOnClickListener(new View.OnClickListener() {
@@ -103,7 +102,7 @@ public class SearchFragment extends Fragment {
                 else{
                     getIpInfo();
                     editLocation.getText().clear();
-                    editLocation.setVisibility(View.INVISIBLE);
+                    editLocation.setVisibility(View.GONE);
                 }
             }
         });
@@ -123,6 +122,15 @@ public class SearchFragment extends Fragment {
                     } else {
                         getGoogleCoordinates();
                     }
+
+                    // goto results fragment
+                    ResultsFragment resultsFragment = new ResultsFragment();
+                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                    transaction.replace(R.id.root_frame, resultsFragment);
+                    transaction.setTransition(FragmentTransaction.TRANSIT_NONE);
+                    transaction.addToBackStack(null);       // support the Back key
+                    transaction.commit();
+
                 }
             }
         });
@@ -140,6 +148,7 @@ public class SearchFragment extends Fragment {
 //                Log.d("After clearing", String.format("key: %s and loc: %s",autokeyword.getText().toString(),editLocation.getText().toString()));
             }
         });
+
 
 
         // Inflate the layout for this fragment
