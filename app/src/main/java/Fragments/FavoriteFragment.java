@@ -1,12 +1,13 @@
-package com.example.eventsearch;
+package Fragments;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.fragment.app.Fragment;
+
+import com.example.eventsearch.R;
 
 public class FavoriteFragment extends Fragment {
 

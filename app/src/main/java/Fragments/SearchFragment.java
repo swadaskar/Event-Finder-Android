@@ -1,12 +1,8 @@
-package com.example.eventsearch;
+package Fragments;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.text.Editable;
@@ -15,15 +11,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -31,6 +24,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.eventsearch.R;
+import com.example.eventsearch.Utility;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -123,13 +118,6 @@ public class SearchFragment extends Fragment {
                         getGoogleCoordinates();
                     }
 
-                    // goto results fragment
-                    ResultsFragment resultsFragment = new ResultsFragment();
-                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                    transaction.replace(R.id.root_frame, resultsFragment);
-                    transaction.setTransition(FragmentTransaction.TRANSIT_NONE);
-                    transaction.addToBackStack(null);       // support the Back key
-                    transaction.commit();
 
                 }
             }
@@ -193,6 +181,17 @@ public class SearchFragment extends Fragment {
                         try {
                             searchResults = new JSONObject(response);
                             Log.d("results", searchResults.getString("_embedded"));
+
+                            // ** send data to result fragment
+                            // goto results fragment
+                            ResultsFragment resultsFragment = new ResultsFragment(searchResults);
+                            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                            transaction.replace(R.id.root_frame, resultsFragment);
+                            transaction.setTransition(FragmentTransaction.TRANSIT_NONE);
+                            transaction.addToBackStack(null);       // support the Back key
+                            transaction.commit();
+
+
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
                         }
