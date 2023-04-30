@@ -29,7 +29,6 @@ public class ResultsFragment extends Fragment {
         this.results = results;
     }
 
-    String[] arr = {"item1","item2","item3","item4"};
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

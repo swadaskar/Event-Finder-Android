@@ -105,17 +105,16 @@ public class DetailsFragment extends Fragment {
             time.setText(eventDetails.getJSONObject("dates").getJSONObject("start").getString("localTime"));
             genres.setText(String.join(" | ", filteredGenreFieldList));
             if(eventDetails.has("priceRanges")){
-                priceRange.setText(String.join("-",String.valueOf(eventDetails.getJSONArray("priceRanges").getJSONObject(0).getDouble("min")),
+                String priceRng = String.join("-",String.valueOf(eventDetails.getJSONArray("priceRanges").getJSONObject(0).getDouble("min")),
                         String.valueOf(eventDetails.getJSONArray("priceRanges").getJSONObject(0).getDouble("max")))+" ("
-                        +eventDetails.getJSONArray("priceRanges").getJSONObject(0).getDouble("currency")+")");
+                        +eventDetails.getJSONArray("priceRanges").getJSONObject(0).getString("currency")+")";
+                priceRange.setText(priceRng);
             }
             ticketStatus.setText(eventDetails.getJSONObject("dates").getJSONObject("status").getString("code"));
             ticketURL.setText(eventDetails.getString("url"));
-//            seatMap.setImageURI(Uri.parse());
-//            Glide.with(this).load().into(seatMap);
-//            Picasso.get().load(eventDetails.getJSONObject("seatmap").getString("staticUrl")).into(seatMap);
-            String url="https://maps.ticketmaster.com/maps/geometry/3/event/2C005D0F0E090CEB/staticImage?type=png&systemId=HOST";
-            Picasso.get().load(url).into(seatMap);
+            Picasso.get().load(eventDetails.getJSONObject("seatmap").getString("staticUrl")).into(seatMap);
+//            String url="https://maps.ticketmaster.com/maps/geometry/3/event/2C005D0F0E090CEB/staticImage?type=png&systemId=HOST";
+//            Picasso.get().load(url).into(seatMap);
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
