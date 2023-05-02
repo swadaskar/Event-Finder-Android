@@ -10,7 +10,7 @@
         android:layout_width="363dp"
         android:layout_height="550dp"
         android:layout_gravity="center"
-        android:background="#000000"
+        android:background="@drawable/rounded_edges"
         tools:context=".fragment_search">
 
         <TextView

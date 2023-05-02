@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/facebook"
+        android:icon="@drawable/facebook"
+        android:title="Facebook"
+        app:showAsAction="always"/>
+
+    <item android:id="@+id/twitter"
+        android:icon="@drawable/twitter"
+        android:title="Twitter"
+        android:background="@drawable/simple_circle"
+        app:showAsAction="always"/>
+
+    <item android:id="@+id/favoriteMenu"
+        android:icon="@drawable/heart_outline"
+        android:title="Twitter"
+        app:showAsAction="always"/>
+
+</menu>

@@ -69,15 +69,15 @@ public class SearchFragment extends Fragment {
         autokeyword = (AutoCompleteTextView) rootView.findViewById(R.id.editKeyword);
         autokeyword.setThreshold(1);//will start working from first character
         autokeyword.setAdapter(autoSuggestAdapter);//setting the adapter data into the AutoCompleteTextView
-        autokeyword.addTextChangedListener(new TextWatcher() {
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //retrieve data s
-            }
-            public void afterTextChanged(Editable s) {
-                retrieveData(s.toString());
-            }
-        });
+//        autokeyword.addTextChangedListener(new TextWatcher() {
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                //retrieve data s
+//            }
+//            public void afterTextChanged(Editable s) {
+//                retrieveData(s.toString());
+//            }
+//        });
 
         // ** code for setting up Spinner
         spinner = (Spinner) rootView.findViewById(R.id.spinner);

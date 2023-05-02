@@ -1,5 +1,7 @@
 package Fragments;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -11,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -33,7 +36,8 @@ public class DetailsFragment extends Fragment {
     private String TAG = "DetailsFragment";
     View detailView;
     JSONObject eventDetails;
-    TextView artistName, venueName, date, time, genres, priceRange, ticketStatus, ticketURL;
+    TextView artistName, venueName, date, time, genres, priceRange, ticketURL;
+    Button ticketStatus;
     ImageView seatMap;
     public DetailsFragment(JSONObject json){
         eventDetails = json;
@@ -110,8 +114,47 @@ public class DetailsFragment extends Fragment {
                         +eventDetails.getJSONArray("priceRanges").getJSONObject(0).getString("currency")+")";
                 priceRange.setText(priceRng);
             }
-            ticketStatus.setText(eventDetails.getJSONObject("dates").getJSONObject("status").getString("code"));
+
+            String color, ticketStatusText;
+            switch (eventDetails.getJSONObject("dates").getJSONObject("status").getString("code")) {
+                case "onsale":
+                    color = "#00FF00";
+                    ticketStatusText = "On Sale";
+                case "offsale":
+                    color = "#FF0000";
+                    ticketStatusText = "Off Sale";
+                case "canceled":
+                case "cancelled":
+                    color = "#000000";
+                    ticketStatusText = "Canceled";
+                case "postponed":
+                    color = "#ffd343";
+                    ticketStatusText = "Postponed";
+                case "rescheduled":
+                    color = "#ffd343";
+                    ticketStatusText = "Rescheduled";
+                default:
+                    color = "#00FF00";
+                    ticketStatusText = "On Sale";
+            }
+            ticketStatus.setBackgroundColor(Color.parseColor(color));
+            ticketStatus.setText(ticketStatusText);
+
+
             ticketURL.setText(eventDetails.getString("url"));
+            ticketURL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent openURL = new Intent(Intent.ACTION_VIEW);
+                    try {
+                        openURL.setData(Uri.parse(eventDetails.getString("url")));
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                    detailView.getContext().startActivity(openURL);
+                }
+            });
+
             Picasso.get().load(eventDetails.getJSONObject("seatmap").getString("staticUrl")).into(seatMap);
 //            String url="https://maps.ticketmaster.com/maps/geometry/3/event/2C005D0F0E090CEB/staticImage?type=png&systemId=HOST";
 //            Picasso.get().load(url).into(seatMap);
