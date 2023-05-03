@@ -15,23 +15,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tabBackground="@android:color/black"
-        app:tabTextColor="#FFFFFF"
+        app:tabIndicatorColor="#00FF00"
+        app:tabInlineLabel="true"
         app:tabSelectedTextColor="#00FF00"
-        app:tabIndicatorColor="#00FF00">
+        app:tabTextColor="#FFFFFF"
+        app:tabIconTint="#FFFFFF">
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:icon="@drawable/info_icon"
             android:text="DETAILS" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:icon="@drawable/artist_icon"
             android:text="ARTIST(S)" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:icon="@drawable/venue_icon"
             android:text="VENUE" />
     </com.google.android.material.tabs.TabLayout>
 

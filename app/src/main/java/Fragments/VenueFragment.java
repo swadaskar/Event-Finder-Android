@@ -1,14 +1,26 @@
 package Fragments;
 
+import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -101,18 +113,21 @@ public class VenueFragment extends Fragment implements OnMapReadyCallback {
 
         try {
             openHoursDetail.setText(venueInfo.getJSONObject("boxOfficeInfo").getString("openHoursDetail"));
+            setListener(openHoursDetail);
         } catch (JSONException e) {
             openHoursHeading.setVisibility(View.GONE);
             openHoursDetail.setVisibility(View.GONE);
         }
         try {
             generalRuleDetail.setText(venueInfo.getJSONObject("generalInfo").getString("generalRule"));
+            setListener(generalRuleDetail);
         } catch (JSONException e) {
             generalRuleHeading.setVisibility(View.GONE);
             generalRuleDetail.setVisibility(View.GONE);
         }
         try {
             childRuleDetail.setText(venueInfo.getJSONObject("generalInfo").getString("childRule"));
+            setListener(childRuleDetail);
         } catch (JSONException e) {
             childRuleHeading.setVisibility(View.GONE);
             childRuleDetail.setVisibility(View.GONE);
@@ -130,5 +145,21 @@ public class VenueFragment extends Fragment implements OnMapReadyCallback {
                 .position(venue)
                 .title("Venue Location"));
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(venue,12f));
+    }
+
+    protected void setListener(TextView tv){
+        tv.setOnClickListener(new View.OnClickListener() {
+            Boolean isSmall = true;
+            @Override
+            public void onClick(View view) {
+                if(isSmall){
+                    tv.setMaxLines(10);
+                }else{
+                    tv.setMaxLines(3);
+//                    tv.setEllipsize(tv);
+                }
+                isSmall = !isSmall;
+            }
+        });
     }
 }

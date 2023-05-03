@@ -1,6 +1,7 @@
 package com.example.eventsearch;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -9,8 +10,11 @@ import androidx.viewpager.widget.ViewPager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -41,14 +45,17 @@ public class EventDetails extends AppCompatActivity {
     TextView eventName;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private Boolean isFavorite;
+    private Boolean isFavorite=false;
     private Context context;
     private JSONArray favoriteArray;
     private JSONObject eventDetails;
+    private Menu mainMenu;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.Theme_EventSearch);
         setContentView(R.layout.activity_event_details);
+
 
         // ** setting title, getting artists JSONObject, getting venue name
         ArrayList<String> musicArtists;
@@ -64,14 +71,9 @@ public class EventDetails extends AppCompatActivity {
                     eventArtists.add(new JSONObject(intent.getStringExtra(artist)));
                 }
             }
-//            for(int i=0;i<musicArtists.size();i++){
-//                boolean last = (i==musicArtists.size()-1);
-//                getArtistDetails(musicArtists.get(i), last);
-//            }
 
-            eventVenue = new JSONObject(intent.getStringExtra("Venue"));
+        eventVenue = new JSONObject(intent.getStringExtra("Venue"));
 
-            setTitle(eventDetails.getString("name"));
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -99,6 +101,17 @@ public class EventDetails extends AppCompatActivity {
 
 
 
+        // ActionBar code
+        ActionBar actionBar = getSupportActionBar();
+        try {
+            setTitle(Html.fromHtml("<font color=\"#4CA327\">" + eventDetails.getString("name") + "</font>"));
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+        actionBar.setHomeAsUpIndicator(R.drawable.green_back_btn);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+
 
 
         FragmentManager em = getSupportFragmentManager();
@@ -114,10 +127,16 @@ public class EventDetails extends AppCompatActivity {
 
         viewPager.setAdapter(vpAdapter);
 
+        tabLayout.getTabAt(0).setIcon(R.drawable.info_icon);
+        tabLayout.getTabAt(1).setIcon(R.drawable.artist_icon);
+        tabLayout.getTabAt(2).setIcon(R.drawable.venue_icon);
+//        tabLayout.getTabAt(0).setColorFilter
+
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
+        mainMenu = menu;
         inflater.inflate(R.menu.my_options_menu, menu);
         // return true so that the menu pop up is opened
         return true;
@@ -179,5 +198,13 @@ public class EventDetails extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        invalidateOptionsMenu();
+        // Set favorite menu item
+        MenuItem item3 = menu.getItem(2);
+        item3.setIcon(isFavorite?R.drawable.heart_filled:R.drawable.heart_outline);
+        return super.onPrepareOptionsMenu(menu);
     }
 }

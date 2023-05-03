@@ -24,11 +24,25 @@ import java.util.Map;
 import Adapters.EventRecyclerAdapter;
 import Adapters.FavoriteRecyclerAdapter;
 
-public class FavoriteFragment extends Fragment {
+public class FavoriteFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener{
     private final String TAG = "FavoriteFragment";
     View favoriteView;
-    RecyclerView recyclerView;
+    RecyclerView recyclerView, eventRecyclerView;
+    JSONArray favoriteArray;
+    ArrayList<JSONObject> favoriteList;
+    FavoriteRecyclerAdapter customAdapter;
 
+    @Override
+    public void onStart(){
+        super.onStart();
+        EventRecyclerAdapter.registerPreferences(favoriteView.getContext(), this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventRecyclerAdapter.unregisterPreferences(favoriteView.getContext(), this);
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -37,16 +51,17 @@ public class FavoriteFragment extends Fragment {
         Log.d(TAG, String.format("FavoriteFragment: inside"));
 
         // ** code for getting sharedpreferences results
-        ArrayList<JSONObject> favoriteList = new ArrayList<>();
+        favoriteList = new ArrayList<>();
         SharedPreferences sharedPreferences = favoriteView.getContext().getSharedPreferences("FavoriteList",0);
-        JSONArray favoriteArray = new JSONArray();
+        favoriteArray = new JSONArray();
+
         if(sharedPreferences.contains("FavoriteArray")){
             try {
                 favoriteArray = new JSONArray(sharedPreferences.getString("FavoriteArray",null));
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
-            for(int i=0;i<favoriteArray.length();i++){
+            for(int i=favoriteArray.length()-1;i>=0;i--){
                 try {
                     favoriteList.add(favoriteArray.getJSONObject(i));
                 } catch (JSONException e) {
@@ -65,9 +80,9 @@ public class FavoriteFragment extends Fragment {
 
         // ** code for recyclerView
         recyclerView = favoriteView.findViewById(R.id.favorites);
+        eventRecyclerView = favoriteView.findViewById(R.id.results);
         recyclerView.setLayoutManager(new LinearLayoutManager(favoriteView.getContext()));
         recyclerView.setHasFixedSize(true);
-        FavoriteRecyclerAdapter customAdapter = null;
         try {
             customAdapter = new FavoriteRecyclerAdapter(favoriteView.getContext(), favoriteList, favoriteArray);
         } catch (JSONException e) {
@@ -77,5 +92,36 @@ public class FavoriteFragment extends Fragment {
         recyclerView.setNestedScrollingEnabled(false);
 
         return favoriteView;
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sp, String s) {
+//        Log.d(TAG, String.format("onSharedPreferenceChanged: change in results %s",s));
+        if(s.equals("FavoriteArray")){
+            SharedPreferences sharedPreferences = favoriteView.getContext().getSharedPreferences("FavoriteList",0);
+            if(sharedPreferences.contains("FavoriteArray")){
+                favoriteArray = new JSONArray();
+                try {
+                    favoriteArray = new JSONArray(sharedPreferences.getString("FavoriteArray",null));
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+                favoriteList = new ArrayList<>();
+                for(int i=favoriteArray.length()-1;i>=0;i--){
+                    try {
+                        favoriteList.add(favoriteArray.getJSONObject(i));
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+            try {
+                customAdapter = new FavoriteRecyclerAdapter(favoriteView.getContext(), favoriteList, favoriteArray);
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+            recyclerView.setAdapter(customAdapter);
+            recyclerView.setNestedScrollingEnabled(false);
+        }
     }
 }

@@ -24,8 +24,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 
-public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecyclerAdapter.ViewHolder> {
-    private String TAG = "FavoriteRecyclerAdapter";
+public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecyclerAdapter.ViewHolder>{
+    private final String TAG = "FavoriteRecyclerAdapter";
     private Context context;
     private ArrayList<JSONObject> localDataSet;
     private JSONArray favoriteArray;
@@ -63,44 +63,26 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
         SharedPreferences.Editor editor=sharedPreferences.edit();
 
         // check if EID exists in favorite array
-        Boolean[] isFavorite = {false};
-        for(int i=0;i<favoriteArray.length();i++){
-            try {
-                if(favoriteArray.getJSONObject(i).getString("id").equals(EID)){
-                    isFavorite[0]=true;
-                    break;
-                }
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        if(isFavorite[0]){
-            viewHolder.favourite.setImageResource(R.drawable.heart_filled);
-        }else{
-            viewHolder.favourite.setImageResource(R.drawable.heart_outline);
-        }
+        Boolean[] isFavorite = {true};
         JSONObject finalEventDetails = eventDetails;
+        viewHolder.favourite.setImageResource(R.drawable.heart_filled);
         viewHolder.favourite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isFavorite[0]){
-                    for(int i=0;i<favoriteArray.length();i++){
-                        try {
-                            if(favoriteArray.getJSONObject(i).getString("id").equals(EID)){
-                                favoriteArray.remove(i);
-                                break;
-                            }
-                        } catch (JSONException e) {
-                            throw new RuntimeException(e);
+                for(int i=0;i<favoriteArray.length();i++){
+                    try {
+                        if(favoriteArray.getJSONObject(i).getString("id").equals(EID)){
+                            favoriteArray.remove(i);
+                            break;
                         }
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
                     }
-                    viewHolder.favourite.setImageResource(R.drawable.heart_outline);
-                }else{
-                    favoriteArray.put(finalEventDetails);
-                    viewHolder.favourite.setImageResource(R.drawable.heart_filled);
                 }
-                isFavorite[0] = !isFavorite[0];
+//                viewHolder.favourite.setImageResource(R.drawable.heart_outline);
+//                isFavorite[0] = !isFavorite[0];
+                localDataSet.remove(viewHolder.getAdapterPosition());
+                notifyItemRemoved(viewHolder.getAdapterPosition());
                 editor.putString("FavoriteArray", favoriteArray.toString());
                 editor.apply();
                 notifyDataSetChanged();
@@ -111,6 +93,7 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -118,6 +101,19 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
     public int getItemCount() {
         return localDataSet.size();
     }
+
+    public static void registerPreferences(Context context, SharedPreferences.OnSharedPreferenceChangeListener Callback){
+        SharedPreferences sharedPreferences = context.getSharedPreferences("FavoriteList",0);
+        sharedPreferences.registerOnSharedPreferenceChangeListener(Callback);
+    }
+
+    public static void unregisterPreferences(Context context, SharedPreferences.OnSharedPreferenceChangeListener Callback){
+        Log.d("FavoriteRecyclerAdapter", "unregisterPreferences: removed");
+        SharedPreferences sharedPreferences = context.getSharedPreferences("FavoriteList",0);
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(Callback);
+    }
+
+
 
     /**
      * Provide a reference to the type of views that you are using
@@ -143,5 +139,4 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
         @Override
         public void onClick(View view) {}
     }
-
 }

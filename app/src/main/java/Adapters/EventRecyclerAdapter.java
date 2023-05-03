@@ -31,7 +31,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdapter.ViewHolder> {
+public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdapter.ViewHolder>{
     private String TAG = "EventRecyclerAdapter";
     private Context context;
     private JSONArray localDataSet;
@@ -122,6 +122,7 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdap
             Picasso.get().load(eventDetails.getJSONArray("images").getJSONObject(0).getString("url")).into(viewHolder.icon);
 
             viewHolder.eventName.setText(eventDetails.getString("name"));
+            viewHolder.eventName.setSelected(true);
             viewHolder.eventDate.setText(eventDetails.getJSONObject("dates").getJSONObject("start").getString("localDate"));
 
             viewHolder.venue.setText(eventDetails.getJSONObject("_embedded").getJSONArray("venues").getJSONObject(0).getString("name"));
@@ -137,6 +138,18 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdap
     @Override
     public int getItemCount() {
         return localDataSet.length();
+    }
+
+    public static void registerPreferences(Context context, SharedPreferences.OnSharedPreferenceChangeListener Callback){
+//        Log.d("EventRecyclerAdapter", "registerPreferences: added");
+        SharedPreferences sharedPreferences = context.getSharedPreferences("FavoriteList",0);
+        sharedPreferences.registerOnSharedPreferenceChangeListener(Callback);
+    }
+
+    public static void unregisterPreferences(Context context, SharedPreferences.OnSharedPreferenceChangeListener Callback){
+//        Log.d("EventRecyclerAdapter", "unregisterPreferences: removed");
+        SharedPreferences sharedPreferences = context.getSharedPreferences("FavoriteList",0);
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(Callback);
     }
 
     /**

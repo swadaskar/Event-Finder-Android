@@ -1,8 +1,10 @@
 package Fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.text.Editable;
@@ -54,7 +56,7 @@ public class SearchFragment extends Fragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_search, container, false);
 
-
+        rootView.findViewById(R.id.keyword).setSelected(true);
         editDistance = rootView.findViewById(R.id.editDistance);
         editLocation = rootView.findViewById(R.id.editLocation);
         autoDetect = rootView.findViewById(R.id.autoDetect);
@@ -103,6 +105,7 @@ public class SearchFragment extends Fragment {
         });
 
         // ** code for submit button
+        searchButton.setBackgroundColor(Color.parseColor("#3A8C12"));
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -123,6 +126,7 @@ public class SearchFragment extends Fragment {
             }
         });
 
+        clearButton.setBackgroundColor(Color.parseColor("#CE6521"));
         clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -184,16 +188,24 @@ public class SearchFragment extends Fragment {
 
                             // ** send data to result fragment
                             // goto results fragment
-                            ResultsFragment resultsFragment = new ResultsFragment(searchResults);
-                            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                            transaction.replace(R.id.root_frame, resultsFragment);
+
+//                            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//                            transaction.replace(R.id.root_frame, resultsFragment);
+//                            transaction.setTransition(FragmentTransaction.TRANSIT_NONE);
+//                            transaction.addToBackStack(null);       // support the Back key
+//                            transaction.commit();
+                            FragmentManager fm = getActivity().getSupportFragmentManager();
+//                            Fragment rf = fm.findFragmentById(R.id.results_frame);
+                            Fragment sf = fm.findFragmentById(R.id.root_frame);
+                            FragmentTransaction transaction = fm.beginTransaction();
+                            ResultsFragment resultsFragment = new ResultsFragment(searchResults, sf);
+                            // always add new result fragment
+                            transaction.add(R.id.root_frame, resultsFragment);
+                            transaction.hide(sf);
                             transaction.setTransition(FragmentTransaction.TRANSIT_NONE);
-                            transaction.addToBackStack(null);       // support the Back key
                             transaction.commit();
-
-
                         } catch (JSONException e) {
-                            throw new RuntimeException(e);
+//                            throw new RuntimeException(e);
                         }
                     }
                 }, new Response.ErrorListener() {

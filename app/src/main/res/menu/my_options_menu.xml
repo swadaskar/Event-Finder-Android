@@ -9,14 +9,14 @@
         app:showAsAction="always"/>
 
     <item android:id="@+id/twitter"
-        android:icon="@drawable/twitter"
+        android:icon="@mipmap/twitter_round"
+        android:roundIcon="@mipmap/twitter_round"
         android:title="Twitter"
-        android:background="@drawable/simple_circle"
         app:showAsAction="always"/>
 
     <item android:id="@+id/favoriteMenu"
         android:icon="@drawable/heart_outline"
-        android:title="Twitter"
+        android:title="Favorite"
         app:showAsAction="always"/>
 
 </menu>
