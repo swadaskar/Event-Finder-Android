@@ -1,11 +1,13 @@
 package Fragments;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -31,6 +33,7 @@ public class FavoriteFragment extends Fragment implements SharedPreferences.OnSh
     JSONArray favoriteArray;
     ArrayList<JSONObject> favoriteList;
     FavoriteRecyclerAdapter customAdapter;
+    TextView noFavorites;
 
     @Override
     public void onStart(){
@@ -68,14 +71,17 @@ public class FavoriteFragment extends Fragment implements SharedPreferences.OnSh
                     throw new RuntimeException(e);
                 }
             }
+        }
+
+        // check if results are zero
+        noFavorites = favoriteView.findViewById(R.id.noFavorites);
+        noFavorites.setTextColor(Color.parseColor("#4CA327"));
+        if(favoriteList.size()>0){
+            noFavorites.setVisibility(View.GONE);
         }else{
-//            noBooking.setVisibility(View.VISIBLE);
+            noFavorites.setVisibility(View.VISIBLE);
         }
 
-
-        if(favoriteList.size()==0){
-//            noBooking.setVisibility(View.VISIBLE);
-        }
         Log.d(TAG, String.format("FavoriteFragment: %s",favoriteList));
 
         // ** code for recyclerView
@@ -115,6 +121,14 @@ public class FavoriteFragment extends Fragment implements SharedPreferences.OnSh
                     }
                 }
             }
+
+            // check if favorites are zero
+            if(favoriteList.size()>0){
+                noFavorites.setVisibility(View.GONE);
+            }else{
+                noFavorites.setVisibility(View.VISIBLE);
+            }
+
             try {
                 customAdapter = new FavoriteRecyclerAdapter(favoriteView.getContext(), favoriteList, favoriteArray);
             } catch (JSONException e) {

@@ -17,11 +17,23 @@
         <TextView
             android:id="@+id/backToSearch"
             android:layout_width="match_parent"
-            android:layout_height="68dp"
-            android:text="Back to Search"
+            android:layout_height="37dp"
             android:drawableLeft="@drawable/green_back_btn"
             android:drawablePadding="2dp"
-            />
+            android:text="Back to Search" />
+
+        <TextView
+            android:id="@+id/noResults"
+            android:layout_width="match_parent"
+            android:layout_height="43dp"
+            android:background="@drawable/rounded_edges"
+            android:backgroundTint="@color/light_black"
+            android:gravity="center"
+            android:text="No results found"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="310dp"
+            android:textSize="16sp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/results"

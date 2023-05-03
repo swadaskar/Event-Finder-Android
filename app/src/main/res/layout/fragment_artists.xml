@@ -6,6 +6,18 @@
     tools:context="Fragments.ArtistsFragment">
 
     <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:id="@+id/noArtists"
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:background="@drawable/rounded_edges"
+        android:backgroundTint="@color/light_black"
+        android:gravity="center"
+        android:text="Artist/Music data unavailable"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="345dp"
+        android:textSize="16sp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/artists"

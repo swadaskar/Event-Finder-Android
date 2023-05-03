@@ -37,4 +37,13 @@ public class Utility {
         snackbar.setTextColor(Color.parseColor("#FF000000"));
         snackbar.show();
     }
+
+    public static void snackbarValidationHelper(String text){
+        Snackbar snackbar;
+        snackbar = Snackbar.make(MainActivity.mainView, text, Snackbar.LENGTH_LONG);
+        View snackBarView = snackbar.getView();
+        snackBarView.setBackgroundColor(Color.parseColor("#E1D9D1"));
+        snackbar.setTextColor(Color.parseColor("#FF000000"));
+        snackbar.show();
+    }
 }

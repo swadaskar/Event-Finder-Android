@@ -2,6 +2,7 @@ package Fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -39,21 +41,12 @@ public class ArtistsFragment extends Fragment {
     ArrayList<JSONObject> eventArtists;
     ArrayList<String> musicArtists;
     Context parentContext;
+    TextView noArtists;
 
     public ArtistsFragment(ArrayList<JSONObject> artists){
-//        Log.d(TAG, "Constructor run once ");
         eventArtists = artists;
 //        parentContext = context;
     }
-
-//    @Override
-//    public void onCreate(@Nullable Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        Log.d(TAG, "onCreate: Inside please run once");
-//        for(String artist: musicArtists){
-//            getArtistDetails(artist);
-//        }
-//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,6 +54,15 @@ public class ArtistsFragment extends Fragment {
         // Inflate the layout for this fragment
         artistsView = inflater.inflate(R.layout.fragment_artists, container, false);
         Log.d(TAG, "onCreateView: Runs every time tab selected");
+
+        // check if artists are zero
+        noArtists = artistsView.findViewById(R.id.noArtists);
+        noArtists.setTextColor(Color.parseColor("#4CA327"));
+        if(eventArtists.size()>0){
+            noArtists.setVisibility(View.GONE);
+        }else{
+            noArtists.setVisibility(View.VISIBLE);
+        }
 
         // ** code for recyclerView for artists
         recyclerView = artistsView.findViewById(R.id.artists);

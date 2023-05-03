@@ -38,12 +38,14 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdap
     private Context context;
     private JSONArray localDataSet;
     private JSONArray favoriteArray;
-    private View resultView;
-    public EventRecyclerAdapter(View resultView, Context c, JSONObject dataSet, JSONArray favoriteArray) throws JSONException {
+    public EventRecyclerAdapter(Context c, JSONObject dataSet, JSONArray favoriteArray) throws JSONException {
         context = c;
-        localDataSet = dataSet.getJSONObject("_embedded").getJSONArray("events");
+        if(dataSet.has("_embedded") && dataSet.getJSONObject("_embedded").has("events") && dataSet.getJSONObject("_embedded").getJSONArray("events").length()>0) {
+            localDataSet = dataSet.getJSONObject("_embedded").getJSONArray("events");
+        }else{
+            localDataSet = new JSONArray();
+        }
         this.favoriteArray = favoriteArray;
-        this.resultView = resultView;
     }
 
     // Create new views (invoked by the layout manager)
@@ -137,7 +139,7 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdap
 
             viewHolder.genre.setText(eventDetails.getJSONArray("classifications").getJSONObject(0).getJSONObject("segment").getString("name"));
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+//            throw new RuntimeException(e);
         }
     }
 

@@ -1,6 +1,7 @@
 package Fragments;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -32,7 +33,7 @@ public class ResultsFragment extends Fragment implements SharedPreferences.OnSha
     RecyclerView recyclerView;
     JSONObject results;
     JSONArray favoriteArray;
-    TextView backToSearch;
+    TextView backToSearch, noResults;
     Fragment previousSearchFragment;
 
     public ResultsFragment(JSONObject results, Fragment sf){
@@ -91,12 +92,25 @@ public class ResultsFragment extends Fragment implements SharedPreferences.OnSha
             }
         }
 
+        // check if results are zero
+        noResults = resultView.findViewById(R.id.noResults);
+        noResults.setTextColor(Color.parseColor("#4CA327"));
+        try {
+            if(results.has("_embedded") && results.getJSONObject("_embedded").has("events") && results.getJSONObject("_embedded").getJSONArray("events").length()>0){
+                noResults.setVisibility(View.GONE);
+            }else{
+                noResults.setVisibility(View.VISIBLE);
+            }
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+
         // ** code for recyclerView
         recyclerView = resultView.findViewById(R.id.results);
         recyclerView.setLayoutManager(new LinearLayoutManager(resultView.getContext()));
         EventRecyclerAdapter customAdapter = null;
         try {
-            customAdapter = new EventRecyclerAdapter(resultView.findViewById(R.id.mainActivityLayout), resultView.getContext(), results, favoriteArray);
+            customAdapter = new EventRecyclerAdapter(resultView.getContext(), results, favoriteArray);
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -120,10 +134,24 @@ public class ResultsFragment extends Fragment implements SharedPreferences.OnSha
             }
             EventRecyclerAdapter customAdapter = null;
             try {
-                customAdapter = new EventRecyclerAdapter(resultView.findViewById(R.id.coordinatorLayoutMain), resultView.getContext(), results, favoriteArray);
+                customAdapter = new EventRecyclerAdapter(resultView.getContext(), results, favoriteArray);
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
+
+            // check if results are zero
+            noResults = resultView.findViewById(R.id.noResults);
+            noResults.setTextColor(Color.parseColor("#4CA327"));
+            try {
+                if(results.has("_embedded") && results.getJSONObject("_embedded").has("events") && results.getJSONObject("_embedded").getJSONArray("events").length()>0){
+                    noResults.setVisibility(View.GONE);
+                }else{
+                    noResults.setVisibility(View.VISIBLE);
+                }
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+
             recyclerView.setAdapter(customAdapter);
         }
     }

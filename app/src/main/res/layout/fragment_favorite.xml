@@ -5,6 +5,18 @@
     android:layout_height="match_parent"
     tools:context="Fragments.FavoriteFragment">
 
+    <TextView
+        android:id="@+id/noFavorites"
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:background="@drawable/rounded_edges"
+        android:backgroundTint="@color/light_black"
+        android:gravity="center"
+        android:text="No favorites available"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="350dp"
+        android:textSize="16sp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/favorites"

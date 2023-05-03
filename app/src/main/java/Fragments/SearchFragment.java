@@ -104,16 +104,15 @@ public class SearchFragment extends Fragment {
             }
         });
 
-        // ** code for submit button
-//        searchButton.setBackgroundColor(Color.parseColor("#3A8C12"));
+        // ** code for submit & clear button
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d("valid check", String.format("key: %s and loc: %s",autokeyword.getText().toString(),editLocation.getText().toString()));
                 if (autokeyword.getText().toString().isEmpty()){
-                    Utility.toastCheckHelper(rootView.getContext(),"Enter keyword!");
+                    Utility.snackbarValidationHelper("Enter valid keyword!");
                 } else if (!autoDetect.isChecked() && editLocation.getText().toString().isEmpty()){
-                    Utility.toastCheckHelper(rootView.getContext(),"Enter location!");
+                    Utility.snackbarValidationHelper("Enter valid location!");
                 }else {
                     if (autoDetect.isChecked()) {
                         getSearchResults();
@@ -125,8 +124,6 @@ public class SearchFragment extends Fragment {
                 }
             }
         });
-
-//        clearButton.setBackgroundColor(Color.parseColor("#CE6521"));
         clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -184,7 +181,7 @@ public class SearchFragment extends Fragment {
                         // Display the first 500 characters of the response string.
                         try {
                             searchResults = new JSONObject(response);
-                            Log.d("results", searchResults.getString("_embedded"));
+                            Log.d("results", searchResults.toString());
 
                             // ** send data to result fragment
                             // goto results fragment
