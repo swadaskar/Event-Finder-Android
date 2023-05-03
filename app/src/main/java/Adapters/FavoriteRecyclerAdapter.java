@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eventsearch.R;
+import com.example.eventsearch.Utility;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -50,10 +51,11 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
     @Override
     public void onBindViewHolder(FavoriteRecyclerAdapter.ViewHolder viewHolder, final int position) {
         JSONObject eventDetails = null;
-        String EID;
+        String EID, eventName;
         try {
             eventDetails = localDataSet.get(position);
             EID = eventDetails.getString("id");
+            eventName = eventDetails.getString("name");
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -63,8 +65,6 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
         SharedPreferences.Editor editor=sharedPreferences.edit();
 
         // check if EID exists in favorite array
-        Boolean[] isFavorite = {true};
-        JSONObject finalEventDetails = eventDetails;
         viewHolder.favourite.setImageResource(R.drawable.heart_filled);
         viewHolder.favourite.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,14 +73,13 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
                     try {
                         if(favoriteArray.getJSONObject(i).getString("id").equals(EID)){
                             favoriteArray.remove(i);
+                            Utility.snackbarHelper(eventName, false, true);
                             break;
                         }
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
                     }
                 }
-//                viewHolder.favourite.setImageResource(R.drawable.heart_outline);
-//                isFavorite[0] = !isFavorite[0];
                 localDataSet.remove(viewHolder.getAdapterPosition());
                 notifyItemRemoved(viewHolder.getAdapterPosition());
                 editor.putString("FavoriteArray", favoriteArray.toString());
@@ -88,8 +87,19 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
                 notifyDataSetChanged();
             }
         });
+
+        // Adding event data into each view-group
         try {
-            viewHolder.getTextView().setText(localDataSet.get(position).getString("name"));
+            Picasso.get().load(eventDetails.getJSONArray("images").getJSONObject(0).getString("url")).into(viewHolder.icon);
+
+            viewHolder.eventName.setText(eventDetails.getString("name"));
+            viewHolder.eventName.setSelected(true);
+            viewHolder.eventDate.setText(eventDetails.getJSONObject("dates").getJSONObject("start").getString("localDate"));
+
+            viewHolder.venue.setText(eventDetails.getJSONObject("_embedded").getJSONArray("venues").getJSONObject(0).getString("name"));
+            viewHolder.eventTime.setText(eventDetails.getJSONObject("dates").getJSONObject("start").getString("localTime"));
+
+            viewHolder.genre.setText(eventDetails.getJSONArray("classifications").getJSONObject(0).getJSONObject("segment").getString("name"));
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -120,20 +130,20 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
      * (custom ViewHolder)
      */
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        public TextView textView;
-
-        public ImageView favourite;
+        public final ImageView icon;
+        public final TextView eventName,eventDate,venue,eventTime,genre;
+        public final ImageView favourite;
         public ViewHolder(View view) {
             super(view);
             // Define click listener for the ViewHolder's View
             view.setOnClickListener(this);
-
-            textView = (TextView) view.findViewById(R.id.eventName);
+            icon = view.findViewById(R.id.icon);
+            eventName = view.findViewById(R.id.eventName);
+            eventDate = view.findViewById(R.id.eventDate);
+            venue = view.findViewById(R.id.venue);
+            eventTime = view.findViewById(R.id.eventTime);
+            genre = view.findViewById(R.id.genre);
             favourite = view.findViewById(R.id.favourite);
-        }
-
-        public TextView getTextView() {
-            return textView;
         }
 
         @Override

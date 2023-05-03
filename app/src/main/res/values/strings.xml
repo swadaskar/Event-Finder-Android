@@ -4,6 +4,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="spotify"><u>Check out on Spotify</u></string>
     <string name="ticket_url"><u></u></string>
+    <string name="search_button"><b>Search</b></string>
+    <string name="clear_button"><b>Clear</b></string>
     <!-- geometry -->
     <string name="heart_empty_path">
         M32.95, 19 C31.036, 19 29.199, 19.8828338 28,

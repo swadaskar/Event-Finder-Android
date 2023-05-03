@@ -96,7 +96,7 @@ public class ResultsFragment extends Fragment implements SharedPreferences.OnSha
         recyclerView.setLayoutManager(new LinearLayoutManager(resultView.getContext()));
         EventRecyclerAdapter customAdapter = null;
         try {
-            customAdapter = new EventRecyclerAdapter(resultView.getContext(), results, favoriteArray);
+            customAdapter = new EventRecyclerAdapter(resultView.findViewById(R.id.mainActivityLayout), resultView.getContext(), results, favoriteArray);
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -120,7 +120,7 @@ public class ResultsFragment extends Fragment implements SharedPreferences.OnSha
             }
             EventRecyclerAdapter customAdapter = null;
             try {
-                customAdapter = new EventRecyclerAdapter(resultView.getContext(), results, favoriteArray);
+                customAdapter = new EventRecyclerAdapter(resultView.findViewById(R.id.coordinatorLayoutMain), resultView.getContext(), results, favoriteArray);
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }

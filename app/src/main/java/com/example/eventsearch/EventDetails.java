@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -50,12 +51,14 @@ public class EventDetails extends AppCompatActivity {
     private JSONArray favoriteArray;
     private JSONObject eventDetails;
     private Menu mainMenu;
+    public static View eventView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTheme(R.style.Theme_EventSearch);
         setContentView(R.layout.activity_event_details);
 
+        eventView = findViewById(R.id.coordinatorLayoutEvent);
 
         // ** setting title, getting artists JSONObject, getting venue name
         ArrayList<String> musicArtists;
@@ -181,6 +184,7 @@ public class EventDetails extends AppCompatActivity {
                         try {
                             if(favoriteArray.getJSONObject(i).getString("id").equals(eventDetails.getString("id"))){
                                 favoriteArray.remove(i);
+                                Utility.snackbarHelper(eventDetails.getString("name"), false, false);
                                 break;
                             }
                         } catch (JSONException e) {
@@ -189,8 +193,13 @@ public class EventDetails extends AppCompatActivity {
                     }
                     item.setIcon(R.drawable.heart_outline);
                 }else{
-                    favoriteArray.put(eventDetails);
-                    item.setIcon(R.drawable.heart_filled);
+                    try {
+                        favoriteArray.put(eventDetails);
+                        item.setIcon(R.drawable.heart_filled);
+                        Utility.snackbarHelper(eventDetails.getString("name"), true, false);
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
                 isFavorite = !isFavorite;
                 editor.putString("FavoriteArray", favoriteArray.toString());

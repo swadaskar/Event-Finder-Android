@@ -105,7 +105,7 @@ public class SearchFragment extends Fragment {
         });
 
         // ** code for submit button
-        searchButton.setBackgroundColor(Color.parseColor("#3A8C12"));
+//        searchButton.setBackgroundColor(Color.parseColor("#3A8C12"));
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -126,7 +126,7 @@ public class SearchFragment extends Fragment {
             }
         });
 
-        clearButton.setBackgroundColor(Color.parseColor("#CE6521"));
+//        clearButton.setBackgroundColor(Color.parseColor("#CE6521"));
         clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

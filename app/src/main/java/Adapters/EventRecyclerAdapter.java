@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
@@ -22,6 +23,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.eventsearch.EventDetails;
 import com.example.eventsearch.R;
+import com.example.eventsearch.Utility;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -36,10 +38,12 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdap
     private Context context;
     private JSONArray localDataSet;
     private JSONArray favoriteArray;
-    public EventRecyclerAdapter(Context c, JSONObject dataSet, JSONArray favoriteArray) throws JSONException {
+    private View resultView;
+    public EventRecyclerAdapter(View resultView, Context c, JSONObject dataSet, JSONArray favoriteArray) throws JSONException {
         context = c;
         localDataSet = dataSet.getJSONObject("_embedded").getJSONArray("events");
         this.favoriteArray = favoriteArray;
+        this.resultView = resultView;
     }
 
     // Create new views (invoked by the layout manager)
@@ -60,10 +64,11 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdap
         // contents of the view with that element
         ;
         JSONObject eventInfo = null;
-        String EID;
+        String EID, eventName;
         try {
             eventInfo = localDataSet.getJSONObject(position);
             EID = eventInfo.getString("id");
+            eventName = eventInfo.getString("name");
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -106,9 +111,11 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdap
                         }
                     }
                     viewHolder.favourite.setImageResource(R.drawable.heart_outline);
+                    Utility.snackbarHelper(eventName, false, true);
                 }else{
                     favoriteArray.put(eventDetails);
                     viewHolder.favourite.setImageResource(R.drawable.heart_filled);
+                    Utility.snackbarHelper(eventName, true, true);
                 }
                 isFavorite[0] = !isFavorite[0];
                 editor.putString("FavoriteArray", favoriteArray.toString());
