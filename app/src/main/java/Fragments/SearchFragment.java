@@ -1,11 +1,11 @@
 package Fragments;
 
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.transition.TransitionInflater;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -51,6 +52,13 @@ public class SearchFragment extends Fragment {
     public Button clearButton;
     public View rootView;
     public JSONObject searchResults;
+
+//    @Override
+//    public void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        TransitionInflater inflater = TransitionInflater.from(requireContext());
+//        setExitTransition(inflater.inflateTransition(R.transition.fade));
+//    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -64,22 +72,20 @@ public class SearchFragment extends Fragment {
         clearButton = rootView.findViewById(R.id.clearButton);
 
         // ** code for autoComplete
-        String[] fruits = {"Apple", "Banana", "Cherry", "Date", "Grape", "Kiwi", "Mango", "Pear"};
         //Creating the instance of ArrayAdapter containing list of fruit names
-        autoSuggestAdapter = new ArrayAdapter<>(this.getContext(), android.R.layout.select_dialog_item, keywords);
+        autoSuggestAdapter = new ArrayAdapter(rootView.getContext(), R.layout.autosuggest_popdown, R.id.autoSuggestElement, keywords);
         //Getting the instance of AutoCompleteTextView
         autokeyword = (AutoCompleteTextView) rootView.findViewById(R.id.editKeyword);
         autokeyword.setThreshold(1);//will start working from first character
         autokeyword.setAdapter(autoSuggestAdapter);//setting the adapter data into the AutoCompleteTextView
-//        autokeyword.addTextChangedListener(new TextWatcher() {
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                //retrieve data s
-//            }
-//            public void afterTextChanged(Editable s) {
-//                retrieveData(s.toString());
-//            }
-//        });
+        autokeyword.addTextChangedListener(new TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+            public void afterTextChanged(Editable s) {
+                retrieveData(s.toString());
+            }
+        });
 
         // ** code for setting up Spinner
         spinner = (Spinner) rootView.findViewById(R.id.spinner);
@@ -276,26 +282,22 @@ public class SearchFragment extends Fragment {
                     if (results.length()==0){
                         items.add(" ");
                     }
-
-                    autoSuggestAdapter = new ArrayAdapter<String>(rootView.getContext(), android.R.layout.select_dialog_item, items);
+                    autoSuggestAdapter = new ArrayAdapter(rootView.getContext(), R.layout.autosuggest_popdown, R.id.autoSuggestElement, items);
                     keywords = items;
                     Log.d("auto", keywords.toString());
-//                    autocompleteAdapter.notifyDataSetChanged();
-//                    keyword.setAdapter(autocompleteAdapter);
                     autokeyword.setThreshold(1);
-
-//                    final Handler handler = new Handler(Looper.getMainLooper());
 
                     autokeyword.setAdapter(autoSuggestAdapter);
                     autoSuggestAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
-                    e.printStackTrace();
+//                    e.printStackTrace();
+                    // do nothing
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("autoSuggestError", "No results found!");
+                Log.d("In SearchFragment: autoSuggestError", "No results found!");
             }
         });
         requestQueue.add(stringRequest);

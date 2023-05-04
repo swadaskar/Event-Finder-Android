@@ -9,17 +9,17 @@
 
     <LinearLayout
         android:layout_width="358dp"
-        android:layout_height="533dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/rounded_edges"
         android:orientation="vertical"
         android:layout_marginTop="40dp"
-        android:padding="15dp"
+        android:padding="17dp"
         tools:context=".fragment_search">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="473dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="#1D1D1D"
             android:orientation="vertical">

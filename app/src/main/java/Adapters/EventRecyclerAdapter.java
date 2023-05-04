@@ -39,13 +39,9 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdap
     private Context context;
     private JSONArray localDataSet;
     private JSONArray favoriteArray;
-    public EventRecyclerAdapter(Context c, JSONObject dataSet, JSONArray favoriteArray) throws JSONException {
+    public EventRecyclerAdapter(Context c, JSONArray dataSet, JSONArray favoriteArray) throws JSONException {
         context = c;
-        if(dataSet.has("_embedded") && dataSet.getJSONObject("_embedded").has("events") && dataSet.getJSONObject("_embedded").getJSONArray("events").length()>0) {
-            localDataSet = dataSet.getJSONObject("_embedded").getJSONArray("events");
-        }else{
-            localDataSet = new JSONArray();
-        }
+        localDataSet = dataSet;
         this.favoriteArray = favoriteArray;
     }
 
@@ -145,6 +141,7 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdap
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
+        viewHolder.eventName.setSelected(true);
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -153,17 +150,13 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdap
         return localDataSet.length();
     }
 
-    public static void registerPreferences(Context context, SharedPreferences.OnSharedPreferenceChangeListener Callback){
-//        Log.d("EventRecyclerAdapter", "registerPreferences: added");
+    public static void updateWhenAdded(Context context, SharedPreferences.OnSharedPreferenceChangeListener Callback){
+//        Log.d("EventRecyclerAdapter", "updateWhenAdded: added");
         SharedPreferences sharedPreferences = context.getSharedPreferences("FavoriteList",0);
         sharedPreferences.registerOnSharedPreferenceChangeListener(Callback);
     }
 
-    public static void unregisterPreferences(Context context, SharedPreferences.OnSharedPreferenceChangeListener Callback){
-//        Log.d("EventRecyclerAdapter", "unregisterPreferences: removed");
-        SharedPreferences sharedPreferences = context.getSharedPreferences("FavoriteList",0);
-        sharedPreferences.unregisterOnSharedPreferenceChangeListener(Callback);
-    }
+
 
     /**
      * Provide a reference to the type of views that you are using
@@ -179,6 +172,8 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdap
             view.setOnClickListener(this);
             icon = view.findViewById(R.id.icon);
             eventName = view.findViewById(R.id.eventName);
+            eventName.setSelected(true);
+            eventName.setPressed(true);
             eventDate = view.findViewById(R.id.eventDate);
             venue = view.findViewById(R.id.venue);
             eventTime = view.findViewById(R.id.eventTime);
@@ -326,5 +321,11 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdap
             // Add the request to the RequestQueue.
             queue.add(stringRequest);
         }
+    }
+
+    public static void updateWhenRemoved(Context context, SharedPreferences.OnSharedPreferenceChangeListener Callback){
+//        Log.d("EventRecyclerAdapter", "updateWhenRemoved: removed");
+        SharedPreferences sharedPreferences = context.getSharedPreferences("FavoriteList",0);
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(Callback);
     }
 }

@@ -52,7 +52,9 @@ public class ArtistRecyclerAdapter extends RecyclerView.Adapter<ArtistRecyclerAd
             Picasso.get().load(artistInfo.getJSONArray("images").getJSONObject(0).getString("url")).into(viewHolder.artistImage);
 
             viewHolder.artistName.setText(artistInfo.getString("name"));
+            viewHolder.artistName.setSelected(true);
             viewHolder.followers.setText(Utility.getFollowerProper(artistInfo.getJSONObject("followers").getString("total")));
+            viewHolder.followers.setSelected(true);
             viewHolder.spotify.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

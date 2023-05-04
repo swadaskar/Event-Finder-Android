@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,7 +40,7 @@ public class DetailsFragment extends Fragment {
     View detailView;
     JSONObject eventDetails;
     TextView artistName, venueName, date, time, genres, priceRange, ticketURL;
-    Button ticketStatus;
+    TextView ticketStatus;
     ImageView seatMap;
     public DetailsFragment(JSONObject json){
         eventDetails = json;
@@ -105,22 +106,27 @@ public class DetailsFragment extends Fragment {
                 .collect(Collectors.toList());
 
         artistName.setText(String.join(" | ",arrArtists));
+        artistName.setSelected(true);
         try {
             venueName.setText(eventDetails.getJSONObject("_embedded").getJSONArray("venues").getJSONObject(0).getString("name"));
+            venueName.setSelected(true);
             date.setText(Utility.getAmericanWordDate(eventDetails.getJSONObject("dates").getJSONObject("start").getString("localDate")));
+            date.setSelected(true);
             time.setText(Utility.getTwelveHoursTime(eventDetails.getJSONObject("dates").getJSONObject("start").getString("localTime")));
             genres.setText(String.join(" | ", filteredGenreFieldList));
+            genres.setSelected(true);
             if(eventDetails.has("priceRanges")){
                 String priceRng = String.join("-",String.valueOf(eventDetails.getJSONArray("priceRanges").getJSONObject(0).getDouble("min")),
                         String.valueOf(eventDetails.getJSONArray("priceRanges").getJSONObject(0).getDouble("max")))+" ("
                         +eventDetails.getJSONArray("priceRanges").getJSONObject(0).getString("currency")+")";
                 priceRange.setText(priceRng);
+                priceRange.setSelected(true);
             }
 
             String color, ticketStatusText;
             switch (eventDetails.getJSONObject("dates").getJSONObject("status").getString("code")) {
                 case "onsale":
-                    color = "#00FF00";
+                    color = "#4CA327";
                     ticketStatusText = "On Sale";
                 case "offsale":
                     color = "#FF0000";
@@ -136,14 +142,15 @@ public class DetailsFragment extends Fragment {
                     color = "#ffd343";
                     ticketStatusText = "Rescheduled";
                 default:
-                    color = "#00FF00";
+                    color = "#4CA327";
                     ticketStatusText = "On Sale";
             }
             ticketStatus.setBackgroundColor(Color.parseColor(color));
             ticketStatus.setText(ticketStatusText);
 
 
-            ticketURL.setText(eventDetails.getString("url"));
+            ticketURL.setText(Html.fromHtml("<font color=\"#4CA327\"><u>"+eventDetails.getString("url")+"</u></font>"));
+            ticketURL.setSelected(true);
             ticketURL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

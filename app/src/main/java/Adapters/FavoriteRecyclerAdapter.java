@@ -37,13 +37,17 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
         this.favoriteArray =favoriteArray;
         Log.d(TAG, String.format("FavoriteRecyclerAdapter: %s",localDataSet));
     }
-
+    public static void updateWhenRemoved(Context context, SharedPreferences.OnSharedPreferenceChangeListener Callback){
+        Log.d("FavoriteRecyclerAdapter", "updateWhenRemoved: removed");
+        SharedPreferences sharedPreferences = context.getSharedPreferences("FavoriteList",0);
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(Callback);
+    }
     // Create new views (invoked by the layout manager)
     @Override
     public FavoriteRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         // Create a new view, which defines the UI of the list item
         View view = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.event_row, viewGroup, false);
+                .inflate(R.layout.favorite_row, viewGroup, false);
 
         return new FavoriteRecyclerAdapter.ViewHolder(view);
     }
@@ -116,16 +120,12 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
         return localDataSet.size();
     }
 
-    public static void registerPreferences(Context context, SharedPreferences.OnSharedPreferenceChangeListener Callback){
+    public static void updateWhenAdded(Context context, SharedPreferences.OnSharedPreferenceChangeListener Callback){
         SharedPreferences sharedPreferences = context.getSharedPreferences("FavoriteList",0);
         sharedPreferences.registerOnSharedPreferenceChangeListener(Callback);
     }
 
-    public static void unregisterPreferences(Context context, SharedPreferences.OnSharedPreferenceChangeListener Callback){
-        Log.d("FavoriteRecyclerAdapter", "unregisterPreferences: removed");
-        SharedPreferences sharedPreferences = context.getSharedPreferences("FavoriteList",0);
-        sharedPreferences.unregisterOnSharedPreferenceChangeListener(Callback);
-    }
+
 
 
 
@@ -141,13 +141,13 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
             super(view);
             // Define click listener for the ViewHolder's View
             view.setOnClickListener(this);
-            icon = view.findViewById(R.id.icon);
-            eventName = view.findViewById(R.id.eventName);
-            eventDate = view.findViewById(R.id.eventDate);
-            venue = view.findViewById(R.id.venue);
-            eventTime = view.findViewById(R.id.eventTime);
-            genre = view.findViewById(R.id.genre);
-            favourite = view.findViewById(R.id.favourite);
+            icon = view.findViewById(R.id.iconf);
+            eventName = view.findViewById(R.id.eventNamef);
+            eventDate = view.findViewById(R.id.eventDatef);
+            venue = view.findViewById(R.id.venuef);
+            eventTime = view.findViewById(R.id.eventTimef);
+            genre = view.findViewById(R.id.genref);
+            favourite = view.findViewById(R.id.favouritef);
         }
 
         @Override

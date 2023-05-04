@@ -16,10 +16,12 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="387dp"
-                android:layout_height="505dp"
+                android:layout_width="369dp"
+                android:layout_height="499dp"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="20sp"
                 android:layout_marginTop="10sp"
+                android:layout_marginRight="20sp"
                 android:background="@drawable/rounded_edges"
                 android:orientation="vertical">
 
@@ -40,17 +42,23 @@
                             android:paddingLeft="15sp"
                             android:text="Name"
                             android:textColor="#FFFFFF"
-                            android:textSize="18sp" />
+                            android:textSize="19sp" />
 
                         <TextView
                             android:id="@+id/venueName"
                             android:layout_width="196dp"
-                            android:layout_height="32dp"
+                            android:layout_height="31dp"
                             android:layout_column="2"
                             android:layout_gravity="center"
+                            android:ellipsize="marquee"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:marqueeRepeatLimit="marquee_forever"
+                            android:scrollHorizontally="true"
+                            android:singleLine="true"
                             android:text="TextView"
-                            android:textColor="#01DD01"
-                            android:textSize="18sp" />
+                            android:textColor="@color/appGreen"
+                            android:textSize="19sp" />
                     </TableRow>
 
                     <TableRow
@@ -66,7 +74,7 @@
                             android:paddingLeft="15sp"
                             android:text="Address"
                             android:textColor="#FFFFFF"
-                            android:textSize="18sp" />
+                            android:textSize="19sp" />
 
                         <TextView
                             android:id="@+id/address"
@@ -74,9 +82,15 @@
                             android:layout_height="32dp"
                             android:layout_column="2"
                             android:layout_gravity="center"
+                            android:ellipsize="marquee"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:marqueeRepeatLimit="marquee_forever"
+                            android:scrollHorizontally="true"
+                            android:singleLine="true"
                             android:text="TextView"
-                            android:textColor="#01DD01"
-                            android:textSize="18sp" />
+                            android:textColor="@color/appGreen"
+                            android:textSize="19sp" />
                     </TableRow>
 
                     <TableRow
@@ -92,7 +106,7 @@
                             android:paddingLeft="15sp"
                             android:text="City/State"
                             android:textColor="#FFFFFF"
-                            android:textSize="18sp" />
+                            android:textSize="19sp" />
 
                         <TextView
                             android:id="@+id/cityState"
@@ -100,9 +114,15 @@
                             android:layout_height="32dp"
                             android:layout_column="2"
                             android:layout_gravity="center"
+                            android:ellipsize="marquee"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:marqueeRepeatLimit="marquee_forever"
+                            android:scrollHorizontally="true"
+                            android:singleLine="true"
                             android:text="TextView"
-                            android:textColor="#01DD01"
-                            android:textSize="18sp" />
+                            android:textColor="@color/appGreen"
+                            android:textSize="19sp" />
                     </TableRow>
 
                     <TableRow
@@ -118,7 +138,7 @@
                             android:paddingLeft="15sp"
                             android:text="Contact Info"
                             android:textColor="#FFFFFF"
-                            android:textSize="18sp" />
+                            android:textSize="19sp" />
 
                         <TextView
                             android:id="@+id/contact"
@@ -126,110 +146,119 @@
                             android:layout_height="32dp"
                             android:layout_column="2"
                             android:layout_gravity="center"
+                            android:ellipsize="marquee"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:marqueeRepeatLimit="marquee_forever"
+                            android:scrollHorizontally="true"
+                            android:singleLine="true"
                             android:text="TextView"
-                            android:textColor="#01DD01"
-                            android:textSize="18sp" />
+                            android:textColor="@color/appGreen"
+                            android:textSize="19sp" />
                     </TableRow>
 
                 </TableLayout>
 
                 <androidx.cardview.widget.CardView
-                    android:layout_width="359dp"
-                    android:layout_height="100dp"
+                    android:layout_width="339dp"
+                    android:layout_height="193dp"
+                    android:layout_gravity="center"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:elevation="10dp"
-                    app:cardCornerRadius="10dp"
-                    android:layout_gravity="center">
-                    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-                        xmlns:tools="http://schemas.android.com/tools"
-                        android:id="@+id/maps"
-                        android:name="com.google.android.gms.maps.SupportMapFragment"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/rounded_edges"
-                        android:gravity="center"
-                        tools:context=".MapsActivity" />
+                    app:cardCornerRadius="10dp">
+                                        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                                            xmlns:tools="http://schemas.android.com/tools"
+                                            android:id="@+id/maps"
+                                            android:name="com.google.android.gms.maps.SupportMapFragment"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:background="@drawable/rounded_edges"
+                                            android:gravity="center"
+                                            tools:context=".MapsActivity" />
                 </androidx.cardview.widget.CardView>
 
 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="387dp"
+                android:id="@+id/extraVenueDetails"
+                android:layout_width="361dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="25sp"
                 android:layout_marginTop="10sp"
+                android:layout_marginRight="25sp"
+                android:layout_marginBottom="25sp"
                 android:background="@drawable/rounded_edges_yellow"
                 android:orientation="vertical"
                 android:paddingLeft="10sp"
                 android:paddingTop="10sp"
                 android:paddingRight="10sp"
-                android:paddingBottom="10sp"
-                android:layout_marginBottom="25sp">
+                android:paddingBottom="10sp">
 
                 <TextView
                     android:id="@+id/openHoursHeading"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingBottom="10sp"
                     android:text="Open Hours"
                     android:textColor="@color/black"
-                    android:paddingBottom="10sp"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/openHoursDetail"
-                    android:layout_width="375dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:maxLines="3"
+                    android:paddingBottom="10sp"
                     android:text="Open Hours Details"
                     android:textColor="@color/black"
-                    android:paddingBottom="10sp"
                     android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/generalRuleHeading"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingBottom="10sp"
                     android:text="General Rules"
                     android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:paddingBottom="10sp"
-                    android:textSize="20sp"/>
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/generalRuleDetail"
-                    android:layout_width="377dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:maxLines="3"
+                    android:paddingBottom="10sp"
                     android:text="General Rules Detail"
                     android:textColor="@color/black"
-                    android:paddingBottom="10sp"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/childRuleHeading"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingBottom="10sp"
                     android:text="Child Rules"
                     android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:paddingBottom="10sp"
-                    android:textSize="20sp"/>
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/childRuleDetail"
-                    android:layout_width="376dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:maxLines="3"
+                    android:paddingBottom="10sp"
                     android:text="Child Rules Detail"
                     android:textColor="@color/black"
-                    android:paddingBottom="10sp"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp" />
             </LinearLayout>
 
 

@@ -9,8 +9,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.transition.TransitionInflater;
 
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +25,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
 import Adapters.EventRecyclerAdapter;
 import Adapters.FavoriteRecyclerAdapter;
 
@@ -33,6 +38,7 @@ public class ResultsFragment extends Fragment implements SharedPreferences.OnSha
     View resultView;
     RecyclerView recyclerView;
     JSONObject results;
+    JSONArray sortedResults = new JSONArray();
     JSONArray favoriteArray;
     TextView noResults;
     LinearLayout backToSearch;
@@ -45,14 +51,20 @@ public class ResultsFragment extends Fragment implements SharedPreferences.OnSha
     @Override
     public void onStart(){
         super.onStart();
-        FavoriteRecyclerAdapter.registerPreferences(resultView.getContext(), this);
+        FavoriteRecyclerAdapter.updateWhenAdded(resultView.getContext(), this);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        FavoriteRecyclerAdapter.unregisterPreferences(resultView.getContext(), this);
+        FavoriteRecyclerAdapter.updateWhenRemoved(resultView.getContext(), this);
     }
+//    @Override
+//    public void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        TransitionInflater inflater = TransitionInflater.from(requireContext());
+//        setEnterTransition(inflater.inflateTransition(R.transition.slide_right));
+//    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -98,9 +110,11 @@ public class ResultsFragment extends Fragment implements SharedPreferences.OnSha
         // check if results are zero
         noResults = resultView.findViewById(R.id.noResults);
         noResults.setTextColor(Color.parseColor("#4CA327"));
+
         try {
             if(results.has("_embedded") && results.getJSONObject("_embedded").has("events") && results.getJSONObject("_embedded").getJSONArray("events").length()>0){
                 noResults.setVisibility(View.GONE);
+                sortedResults = sortSearchResults(results);
             }else{
                 noResults.setVisibility(View.VISIBLE);
             }
@@ -113,7 +127,7 @@ public class ResultsFragment extends Fragment implements SharedPreferences.OnSha
         recyclerView.setLayoutManager(new LinearLayoutManager(resultView.getContext()));
         EventRecyclerAdapter customAdapter = null;
         try {
-            customAdapter = new EventRecyclerAdapter(resultView.getContext(), results, favoriteArray);
+            customAdapter = new EventRecyclerAdapter(resultView.getContext(), sortedResults, favoriteArray);
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -137,7 +151,7 @@ public class ResultsFragment extends Fragment implements SharedPreferences.OnSha
             }
             EventRecyclerAdapter customAdapter = null;
             try {
-                customAdapter = new EventRecyclerAdapter(resultView.getContext(), results, favoriteArray);
+                customAdapter = new EventRecyclerAdapter(resultView.getContext(), sortedResults, favoriteArray);
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
@@ -157,6 +171,65 @@ public class ResultsFragment extends Fragment implements SharedPreferences.OnSha
 
             recyclerView.setAdapter(customAdapter);
         }
+    }
+
+    public JSONArray sortSearchResults(JSONObject searchResult) throws JSONException {
+        JSONArray normalJsonArray = searchResult.getJSONObject("_embedded").getJSONArray("events");
+        JSONArray sortedJsonArray = new JSONArray();
+
+        ArrayList<JSONObject> jsonArray = new ArrayList<JSONObject>();
+        for (int i = 0; i < normalJsonArray.length(); i++) {
+            jsonArray.add(normalJsonArray.getJSONObject(i));
+        }
+
+        Collections.sort(jsonArray, new Comparator<JSONObject>() {
+            @Override
+            public int compare(JSONObject a, JSONObject b) {
+                String adate = null;
+                String bdate = null;
+                String atime =null;
+                String btime = null;
+                try {
+                    adate = a.has("dates") && a.getJSONObject("dates").has("start") && a.getJSONObject("dates").getJSONObject("start").has("localDate")
+                            ? a.getJSONObject("dates").getJSONObject("start").getString("localDate")
+                            : "9999-12-31";
+                    bdate = b.has("dates") && b.getJSONObject("dates").has("start") && b.getJSONObject("dates").getJSONObject("start").has("localDate")
+                            ? b.getJSONObject("dates").getJSONObject("start").getString("localDate")
+                            : "9999-12-31";
+
+                    atime = a.has("dates") && a.getJSONObject("dates").has("start") && a.getJSONObject("dates").getJSONObject("start").has("localTime")
+                            ? a.getJSONObject("dates").getJSONObject("start").getString("localTime")
+                            : "23:59:59";
+                    btime = b.has("dates") && b.getJSONObject("dates").has("start") && b.getJSONObject("dates").getJSONObject("start").has("localTime")
+                            ? b.getJSONObject("dates").getJSONObject("start").getString("localTime")
+                            : "23:59:59";
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+
+
+                if (adate.compareTo(bdate) < 0) {
+                    return -1; // a,b order
+                }
+                if (adate.compareTo(bdate) > 0) {
+                    return 1; // b,a order
+                } else {
+                    if (LocalTime.parse(atime).compareTo(LocalTime.parse(btime)) < 0) {
+                        return -1; // a,b order
+                    }
+                    if (LocalTime.parse(atime).compareTo(LocalTime.parse(btime)) > 0) {
+                        return 1; // b,a order
+                    }
+                }
+                return 0; // a,b maintain order
+            }
+        });
+
+        for (int i = 0; i < normalJsonArray.length(); i++) {
+            sortedJsonArray.put(jsonArray.get(i));
+        }
+
+        return sortedJsonArray;
     }
 
 }

@@ -145,7 +145,7 @@ public class EventDetails extends AppCompatActivity {
                 public void onClick(View view) {
                     Intent twitterIntent = null;
                     try {
-                        twitterIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/intent/tweet/?text=Check "+eventDetails.getString("name")+" on Ticketmaster.%0A"+eventDetails.getString("url")));
+                        twitterIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/intent/tweet/?text=Check "+eventDetails.getString("name")+" on Ticketmaster!%0A"+eventDetails.getString("url")));
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
                     }

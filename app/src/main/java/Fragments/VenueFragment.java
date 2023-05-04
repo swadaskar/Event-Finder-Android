@@ -12,6 +12,7 @@ import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
@@ -21,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -44,6 +46,7 @@ public class VenueFragment extends Fragment implements OnMapReadyCallback {
     private String TAG = "VenueFragment";
     View venueView;
     TextView venueName, address, cityState, contact, openHoursHeading, openHoursDetail, generalRuleHeading, generalRuleDetail, childRuleHeading, childRuleDetail;
+    LinearLayout extraVenueDetails;
     JSONObject venueDetails;
     private String lat, lon;
     public VenueFragment(JSONObject venue){
@@ -60,7 +63,8 @@ public class VenueFragment extends Fragment implements OnMapReadyCallback {
         try {
             venueInfo = venueDetails.getJSONObject("_embedded").getJSONArray("venues").getJSONObject(0);
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+//            throw new RuntimeException(e);
+            Log.d(TAG, "onCreateView: No venue info");
         }
 
         // first details
@@ -71,23 +75,31 @@ public class VenueFragment extends Fragment implements OnMapReadyCallback {
 
         try {
             venueName.setText(venueInfo.getString("name"));
+            venueName.setSelected(true);
         } catch (JSONException e) {
-            venueName.setVisibility(View.GONE);
+//            venueName.setVisibility(View.GONE);
+            venueName.setText("N/A");
         }
         try {
             address.setText(venueInfo.getJSONObject("address").getString("line1"));
+            address.setSelected(true);
         } catch (JSONException e) {
-            address.setVisibility(View.GONE);
+//            address.setVisibility(View.GONE);
+            address.setText("N/A");
         }
         try {
             cityState.setText(venueInfo.getJSONObject("city").getString("name")+", "+venueInfo.getJSONObject("state").getString("name"));
+            cityState.setSelected(true);
         } catch (JSONException e) {
-            cityState.setVisibility(View.GONE);
+//            cityState.setVisibility(View.GONE);
+            cityState.setText("N/A");
         }
         try {
             contact.setText(venueInfo.getJSONObject("boxOfficeInfo").getString("phoneNumberDetail"));
+            contact.setSelected(true);
         } catch (JSONException e) {
-            contact.setVisibility(View.GONE);
+//            contact.setVisibility(View.GONE);
+            contact.setText("N/A");
         }
 
         // ** Google maps calling
@@ -95,9 +107,9 @@ public class VenueFragment extends Fragment implements OnMapReadyCallback {
             lat = venueDetails.getJSONObject("_embedded").getJSONArray("venues").getJSONObject(0).getJSONObject("location").getString("latitude");
             lon = venueDetails.getJSONObject("_embedded").getJSONArray("venues").getJSONObject(0).getJSONObject("location").getString("longitude");
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+//            throw new RuntimeException(e);
         }
-        Log.d(TAG, String.format("lat: %s & lon: %s",lat,lon));
+//        Log.d(TAG, String.format("lat: %s & lon: %s",lat,lon));
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.maps);
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
@@ -110,13 +122,15 @@ public class VenueFragment extends Fragment implements OnMapReadyCallback {
         generalRuleDetail = venueView.findViewById(R.id.generalRuleDetail);
         childRuleHeading = venueView.findViewById(R.id.childRuleHeading);
         childRuleDetail = venueView.findViewById(R.id.childRuleDetail);
-
+        extraVenueDetails = venueView.findViewById(R.id.extraVenueDetails);
+        Boolean flag1 = false, flag2 = false, flag3 = false;
         try {
             openHoursDetail.setText(venueInfo.getJSONObject("boxOfficeInfo").getString("openHoursDetail"));
             setListener(openHoursDetail);
         } catch (JSONException e) {
             openHoursHeading.setVisibility(View.GONE);
             openHoursDetail.setVisibility(View.GONE);
+            flag1=true;
         }
         try {
             generalRuleDetail.setText(venueInfo.getJSONObject("generalInfo").getString("generalRule"));
@@ -124,6 +138,7 @@ public class VenueFragment extends Fragment implements OnMapReadyCallback {
         } catch (JSONException e) {
             generalRuleHeading.setVisibility(View.GONE);
             generalRuleDetail.setVisibility(View.GONE);
+            flag2=true;
         }
         try {
             childRuleDetail.setText(venueInfo.getJSONObject("generalInfo").getString("childRule"));
@@ -131,8 +146,11 @@ public class VenueFragment extends Fragment implements OnMapReadyCallback {
         } catch (JSONException e) {
             childRuleHeading.setVisibility(View.GONE);
             childRuleDetail.setVisibility(View.GONE);
+            flag3=true;
         }
-
+        if(flag1 && flag2 && flag3){
+            extraVenueDetails.setVisibility(View.GONE);
+        }
         return venueView;
     }
 
@@ -153,9 +171,11 @@ public class VenueFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onClick(View view) {
                 if(isSmall){
-                    tv.setMaxLines(10);
+                    tv.setMaxLines(Integer.MAX_VALUE);
+                    tv.setEllipsize(null);
                 }else{
                     tv.setMaxLines(3);
+                    tv.setEllipsize(TextUtils.TruncateAt.END);
                 }
                 isSmall = !isSmall;
             }

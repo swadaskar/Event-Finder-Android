@@ -38,13 +38,13 @@ public class FavoriteFragment extends Fragment implements SharedPreferences.OnSh
     @Override
     public void onStart(){
         super.onStart();
-        EventRecyclerAdapter.registerPreferences(favoriteView.getContext(), this);
+        EventRecyclerAdapter.updateWhenAdded(favoriteView.getContext(), this);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        EventRecyclerAdapter.unregisterPreferences(favoriteView.getContext(), this);
+        EventRecyclerAdapter.updateWhenRemoved(favoriteView.getContext(), this);
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

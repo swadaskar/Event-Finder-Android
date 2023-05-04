@@ -18,7 +18,7 @@
             android:layout_gravity="center"
             android:orientation="vertical"
             android:padding="10dp"
-            android:layout_marginTop="40sp">
+            android:layout_marginTop="39sp">
 
             <TableLayout
                 android:layout_width="match_parent"
@@ -27,16 +27,15 @@
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingTop="20dp"
-                    android:paddingBottom="20dp">
+                    android:paddingBottom="10dp">
 
                     <TextView
-                        android:layout_width="168dp"
+                        android:layout_width="150dp"
                         android:layout_height="31dp"
                         android:layout_column="1"
                         android:text="Artist/Teams"
                         android:textColor="#FFFFFF"
-                        android:textSize="22sp"/>
+                        android:textSize="20sp"/>
 
                     <TextView
                         android:id="@+id/artistName"
@@ -52,23 +51,23 @@
                         android:singleLine="true"
                         android:text="TextView"
                         android:textColor="@color/appGreen"
-                        android:textSize="22sp"/>
+                        android:textSize="20sp"/>
 
                 </TableRow>
 
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingTop="20dp"
-                    android:paddingBottom="20dp">
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp">
 
                     <TextView
-                        android:layout_width="178dp"
+                        android:layout_width="150dp"
                         android:layout_height="31dp"
                         android:layout_column="1"
                         android:text="Venue"
                         android:textColor="#FFFFFF"
-                        android:textSize="22sp"/>
+                        android:textSize="20sp"/>
 
                     <TextView
                         android:id="@+id/venueName"
@@ -83,23 +82,23 @@
                         android:text="TextView"
                         android:textColor="@color/appGreen"
                         android:gravity="center_horizontal"
-                        android:textSize="22sp"/>
+                        android:textSize="20sp"/>
 
                 </TableRow>
 
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingTop="20dp"
-                    android:paddingBottom="20dp">
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp">
 
                     <TextView
-                        android:layout_width="178dp"
+                        android:layout_width="150dp"
                         android:layout_height="31dp"
                         android:layout_column="1"
                         android:text="Date"
-                        android:textSize="22sp"
-                        android:textColor="#FFFFFF" />
+                        android:textColor="#FFFFFF"
+                        android:textSize="20sp" />
 
                     <TextView
                         android:id="@+id/date"
@@ -114,23 +113,23 @@
                         android:text="TextView"
                         android:textColor="@color/appGreen"
                         android:gravity="center_horizontal"
-                        android:textSize="22sp"/>
+                        android:textSize="20sp"/>
 
                 </TableRow>
 
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingTop="20dp"
-                    android:paddingBottom="20dp">
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp">
 
                     <TextView
-                        android:layout_width="178dp"
+                        android:layout_width="150dp"
                         android:layout_height="31dp"
                         android:layout_column="1"
                         android:text="Time"
                         android:textColor="#FFFFFF"
-                        android:textSize="22sp"/>
+                        android:textSize="20sp"/>
 
                     <TextView
                         android:id="@+id/time"
@@ -145,23 +144,23 @@
                         android:text="TextView"
                         android:textColor="@color/appGreen"
                         android:gravity="center_horizontal"
-                        android:textSize="22sp" />
+                        android:textSize="20sp" />
 
                 </TableRow>
 
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingTop="20dp"
-                    android:paddingBottom="20dp">
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp">
 
                     <TextView
-                        android:layout_width="178dp"
+                        android:layout_width="150dp"
                         android:layout_height="31dp"
                         android:layout_column="1"
                         android:text="Genres"
                         android:textColor="#FFFFFF"
-                        android:textSize="22sp"/>
+                        android:textSize="20sp"/>
 
                     <TextView
                         android:id="@+id/genres"
@@ -176,30 +175,31 @@
                         android:text="TextView"
                         android:textColor="@color/appGreen"
                         android:gravity="center_horizontal"
-                        android:textSize="22sp" />
+                        android:textSize="20sp" />
 
                 </TableRow>
 
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingTop="20dp"
-                    android:paddingBottom="20dp">
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp">
 
                     <TextView
-                        android:layout_width="178dp"
+                        android:layout_width="150dp"
                         android:layout_height="31dp"
                         android:layout_column="1"
                         android:text="Price Range"
                         android:textColor="#FFFFFF"
-                        android:textSize="22sp"/>
+                        android:textSize="20sp"/>
 
                     <TextView
                         android:id="@+id/priceRange"
-                        android:layout_width="175dp"
+                        android:layout_width="180dp"
                         android:layout_height="31dp"
                         android:ellipsize="marquee"
                         android:focusable="true"
+                        android:layout_column="2"
                         android:focusableInTouchMode="true"
                         android:marqueeRepeatLimit="marquee_forever"
                         android:scrollHorizontally="true"
@@ -207,42 +207,52 @@
                         android:text="TextView"
                         android:textColor="@color/appGreen"
                         android:gravity="center_horizontal"
-                        android:textSize="22sp" />
+                        android:textSize="20sp" />
 
                 </TableRow>
 
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingTop="20dp"
-                    android:paddingBottom="20dp">
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp">
 
                     <TextView
-                        android:layout_width="178dp"
+                        android:layout_width="150dp"
                         android:layout_height="33dp"
                         android:layout_column="1"
                         android:text="Ticket Status"
                         android:textColor="#FFFFFF"
-                        android:textSize="22sp"/>
+                        android:textSize="20sp"/>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="116dp"
                         android:layout_height="34dp">
 
-                        <Button
-                            android:id="@+id/ticketStatus"
-                            android:layout_width="64dp"
-                            android:layout_height="28dp"
-                            android:background="@drawable/rounded_button"
-                            android:text="On Sale"
-                            android:textColor="#FFFFFF"
-                            android:textSize="8sp"
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:layout_weight="1"
+                            app:cardCornerRadius="12dp"
+                            android:layout_margin="5dp"
+                            android:elevation="10dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.5"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_bias="0.5" />
+                            app:layout_constraintVertical_bias="0.5">
+                            <TextView
+                                android:id="@+id/ticketStatus"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:text="On Sale"
+                                android:paddingLeft="5sp"
+                                android:paddingRight="5sp"
+                                android:textColor="#FFFFFF"
+                                android:gravity="center"
+                                android:textSize="18sp"/>
+                        </androidx.cardview.widget.CardView>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -251,16 +261,16 @@
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingTop="20dp"
-                    android:paddingBottom="20dp">
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp">
 
                     <TextView
-                        android:layout_width="178dp"
+                        android:layout_width="150dp"
                         android:layout_height="31dp"
                         android:layout_column="1"
                         android:text="Buy Tickets At"
                         android:textColor="#FFFFFF"
-                        android:textSize="22sp"/>
+                        android:textSize="20sp"/>
 
                     <TextView
                         android:id="@+id/ticketURL"
@@ -272,10 +282,10 @@
                         android:marqueeRepeatLimit="marquee_forever"
                         android:scrollHorizontally="true"
                         android:singleLine="true"
-                        android:text="@string/ticket_url"
+                        android:text="Ticket URL"
                         android:textColor="@color/appGreen"
                         android:gravity="center_horizontal"
-                        android:textSize="22sp" />
+                        android:textSize="20sp" />
 
                 </TableRow>
 
