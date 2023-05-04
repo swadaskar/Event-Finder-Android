@@ -14,13 +14,27 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
+        <LinearLayout
             android:id="@+id/backToSearch"
-            android:layout_width="match_parent"
-            android:layout_height="37dp"
-            android:drawableLeft="@drawable/green_back_btn"
-            android:drawablePadding="2dp"
-            android:text="Back to Search" />
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="43dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="2sp"
+                android:src="@drawable/back_arrow_foreground" />
+
+            <TextView
+                android:layout_width="131dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="Back to Search"
+                android:textColor="#000000"
+                android:textSize="18sp" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/noResults"
@@ -29,7 +43,7 @@
             android:background="@drawable/rounded_edges"
             android:backgroundTint="@color/light_black"
             android:gravity="center"
-            android:text="No results found"
+            android:text="No events found"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:layout_marginTop="310dp"

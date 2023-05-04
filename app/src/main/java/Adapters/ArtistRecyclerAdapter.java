@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eventsearch.R;
+import com.example.eventsearch.Utility;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -51,7 +52,7 @@ public class ArtistRecyclerAdapter extends RecyclerView.Adapter<ArtistRecyclerAd
             Picasso.get().load(artistInfo.getJSONArray("images").getJSONObject(0).getString("url")).into(viewHolder.artistImage);
 
             viewHolder.artistName.setText(artistInfo.getString("name"));
-            viewHolder.followers.setText(artistInfo.getJSONObject("followers").getString("total"));
+            viewHolder.followers.setText(Utility.getFollowerProper(artistInfo.getJSONObject("followers").getString("total")));
             viewHolder.spotify.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

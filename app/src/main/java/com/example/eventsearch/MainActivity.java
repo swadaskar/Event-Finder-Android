@@ -3,12 +3,14 @@ package com.example.eventsearch;
 import android.Manifest;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
 
 import com.google.android.material.tabs.TabLayout;
@@ -31,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
         setTheme(R.style.Theme_EventSearch);
         setContentView(R.layout.activity_main);
 
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle(Html.fromHtml("<font color=\"#4CA327\">EventFinder</font>"));
         // location permission code
         ActivityResultLauncher<String[]> locationPermissionRequest =
                 registerForActivityResult(new ActivityResultContracts
@@ -63,8 +67,6 @@ public class MainActivity extends AppCompatActivity {
 
         FragmentManager sm = getSupportFragmentManager();
         mainView = findViewById(R.id.coordinatorLayoutMain);
-
-//        Utility.snackbarHelper(findViewById(R.id.coordinatorLayoutMain), "Testing snackbar", false);
 
         tabLayout = findViewById(R.id.tablayout);
         viewPager = findViewById(R.id.viewpager);

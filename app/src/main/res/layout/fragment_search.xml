@@ -7,193 +7,149 @@
     tools:context="Fragments.SearchFragment"
     android:id="@+id/search_frame">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="358dp"
-        android:layout_height="515dp"
-        android:layout_gravity="center"
+        android:layout_height="533dp"
+        android:layout_gravity="center_horizontal"
         android:background="@drawable/rounded_edges"
+        android:orientation="vertical"
+        android:layout_marginTop="40dp"
+        android:padding="15dp"
         tools:context=".fragment_search">
 
-        <TextView
-            android:id="@+id/keyword"
-            android:layout_width="323dp"
-            android:layout_height="39dp"
-            android:layout_marginTop="16dp"
-            android:ellipsize="marquee"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:scrollHorizontally="true"
-            android:singleLine="true"
-            android:text="Keyword*"
-            android:textColor="@color/appGreen"
-            android:textSize="25sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.812"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="473dp"
+            android:layout_gravity="center"
+            android:background="#1D1D1D"
+            android:orientation="vertical">
 
-        <AutoCompleteTextView
-            android:id="@+id/editKeyword"
-            android:layout_width="302dp"
-            android:layout_height="39dp"
-            android:layout_marginTop="8dp"
-            android:ems="10"
-            android:hint="Enter the Keyword"
-            android:inputType="textPersonName"
-            android:paddingLeft="5sp"
-            android:paddingTop="5sp"
-            android:paddingRight="5sp"
-            android:paddingBottom="5sp"
-            android:textColor="#ffffff"
-            android:textColorHint="#999999"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@+id/distance"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.464"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/keyword" />
+            <TextView
+                android:id="@+id/keyword"
+                android:layout_width="323dp"
+                android:layout_height="39dp"
+                android:layout_marginBottom="10dp"
+                android:text="Keyword*"
+                android:textColor="@color/appGreen"
+                android:textSize="25sp" />
 
-        <TextView
-            android:id="@+id/distance"
-            android:layout_width="323dp"
-            android:layout_height="39dp"
-            android:text="Distance (Miles)*"
-            android:textColor="@color/appGreen"
-            android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.8"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editKeyword" />
+            <AutoCompleteTextView
+                android:id="@+id/editKeyword"
+                android:layout_width="323dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:ems="10"
+                android:hint="Enter the Keyword"
+                android:inputType="textPersonName"
+                android:textColor="#ffffff"
+                android:textColorHint="#999999"
+                android:textSize="21sp" />
 
-        <EditText
-            android:id="@+id/editDistance"
-            android:layout_width="299dp"
-            android:layout_height="38dp"
-            android:ems="10"
-            android:hint="10"
-            android:inputType="textPersonName"
-            android:paddingLeft="5sp"
-            android:paddingTop="5sp"
-            android:paddingRight="5sp"
-            android:paddingBottom="5sp"
-            android:text="10"
-            android:textColor="#ffffff"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.44"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/distance" />
+            <TextView
+                android:id="@+id/distance"
+                android:layout_width="323dp"
+                android:layout_height="39dp"
+                android:layout_marginBottom="10dp"
+                android:text="Distance (Miles)*"
+                android:textColor="@color/appGreen"
+                android:textSize="25sp" />
 
-        <TextView
-            android:id="@+id/category"
-            android:layout_width="323dp"
-            android:layout_height="39dp"
-            android:text="Category*"
-            android:textColor="@color/appGreen"
-            android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.771"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editDistance" />
+            <EditText
+                android:id="@+id/editDistance"
+                android:layout_width="323dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:ems="10"
+                android:hint="10"
+                android:inputType="textPersonName"
+                android:text="10"
+                android:textColor="#ffffff"
+                android:textSize="21sp" />
 
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="307dp"
-            android:layout_height="39dp"
-            android:layout_marginTop="8dp"
-            android:spinnerMode="dropdown"
-            app:layout_constraintBottom_toTopOf="@+id/location"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.549"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/category" />
+            <TextView
+                android:id="@+id/category"
+                android:layout_width="323dp"
+                android:layout_height="39dp"
+                android:layout_marginBottom="7dp"
+                android:text="Category*"
+                android:textColor="@color/appGreen"
+                android:textSize="25sp" />
 
-        <TextView
-            android:id="@+id/location"
-            android:layout_width="163dp"
-            android:layout_height="39dp"
-            android:layout_marginTop="8dp"
-            android:paddingLeft="18sp"
-            android:text="Location*"
-            android:textColor="@color/appGreen"
-            android:textSize="24sp"
-            app:layout_constraintEnd_toStartOf="@+id/autoDetect"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinner" />
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="323dp"
+                android:layout_height="39dp"
+                android:layout_marginBottom="8dp"
+                android:popupBackground="@color/black"
+                android:spinnerMode="dropdown" />
 
-        <Switch
-            android:id="@+id/autoDetect"
-            android:layout_width="160dp"
-            android:layout_height="49dp"
-            android:layout_marginStart="7dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="7dp"
-            android:text="Auto-Detect"
-            android:textColor="#999999"
-            android:textSize="18sp"
+            <LinearLayout
+                android:layout_width="323dp"
+                android:layout_height="39dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
 
-            android:theme="@style/GreenSwitch"
-            app:layout_constraintBottom_toTopOf="@+id/editLocation"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/location"
-            app:layout_constraintTop_toBottomOf="@+id/spinner"
-            app:layout_constraintVertical_bias="0.421" />
+                <TextView
+                    android:id="@+id/location"
+                    android:layout_width="163dp"
+                    android:layout_height="39dp"
+                    android:text="Location*"
+                    android:textColor="@color/appGreen"
+                    android:textSize="25sp" />
 
-        <EditText
-            android:id="@+id/editLocation"
-            android:layout_width="305dp"
-            android:layout_height="39dp"
-            android:ems="10"
-            android:hint="Enter the Location"
-            android:inputType="textPersonName"
-            android:paddingLeft="5sp"
-            android:paddingTop="5sp"
-            android:paddingRight="5sp"
-            android:paddingBottom="5sp"
-            android:textColor="#ffffff"
-            android:textColorHint="#999999"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.528"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/location" />
+                <Switch
+                    android:id="@+id/autoDetect"
+                    android:layout_width="160dp"
+                    android:layout_height="39dp"
+                    android:text="Auto-Detect"
+                    android:textColor="#999999"
+                    android:textSize="18sp"
+                    android:theme="@style/GreenSwitch" />
+            </LinearLayout>
 
-        <Button
-            android:id="@+id/searchButton"
-            android:layout_width="151dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="25dp"
-            android:background="@drawable/rounded_button"
-            android:backgroundTint="#3A8C12"
-            android:text="@string/search_button"
-            android:textAllCaps="false"
-            android:textColor="#fff"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toStartOf="@+id/clearButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editLocation" />
+            <EditText
+                android:id="@+id/editLocation"
+                android:layout_width="323dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:ems="10"
+                android:hint="Enter the Location"
+                android:inputType="textPersonName"
+                android:textColor="#ffffff"
+                android:textColorHint="#999999"
+                android:textSize="21sp" />
 
-        <Button
-            android:id="@+id/clearButton"
-            android:layout_width="154dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="25dp"
-            android:layout_marginEnd="17dp"
-            android:layout_marginTop="25dp"
-            android:radius="10dp"
-            android:background="@drawable/rounded_button"
-            android:backgroundTint="#CE6521"
-            android:text="@string/clear_button"
-            android:textAllCaps="false"
-            android:textColor="#fff"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/searchButton"
-            app:layout_constraintTop_toBottomOf="@+id/editLocation" />
+            <LinearLayout
+                android:layout_width="323dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <Button
+                    android:id="@+id/searchButton"
+                    android:layout_width="157dp"
+                    android:layout_height="45dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/rounded_button"
+                    android:backgroundTint="#3A8C12"
+                    android:text="@string/search_button"
+                    android:textAllCaps="false"
+                    android:textColor="#fff"
+                    android:textSize="21sp" />
+
+                <Button
+                    android:id="@+id/clearButton"
+                    android:layout_width="156dp"
+                    android:layout_height="45dp"
+                    android:background="@drawable/rounded_button"
+                    android:backgroundTint="#CE6521"
+                    android:text="@string/clear_button"
+                    android:textAllCaps="false"
+                    android:textColor="#fff"
+                    android:textSize="21sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
 
 </FrameLayout>

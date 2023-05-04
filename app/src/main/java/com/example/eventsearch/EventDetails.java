@@ -11,16 +11,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -34,6 +39,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import Adapters.VPAdapter;
@@ -42,6 +48,7 @@ import Fragments.DetailsFragment;
 import Fragments.VenueFragment;
 
 public class EventDetails extends AppCompatActivity {
+    private final String TAG = "EventDetails";
 
     TextView eventName;
     private TabLayout tabLayout;
@@ -55,7 +62,7 @@ public class EventDetails extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(R.style.Theme_EventSearch);
+        setTheme(R.style.Theme_EventDetails);
         setContentView(R.layout.activity_event_details);
 
         eventView = findViewById(R.id.coordinatorLayoutEvent);
@@ -102,17 +109,84 @@ public class EventDetails extends AppCompatActivity {
             }
         }
 
+        // Custom toolbar code
+        TextView eventToolbarTitle;
+        ImageView greenBackButton, facebook, twitter, favoriteToolBar;
+        eventToolbarTitle = findViewById(R.id.eventToolbarTitle);
+        greenBackButton = findViewById(R.id.greenBackButton);
+        facebook = findViewById(R.id.facebook);
+        twitter = findViewById(R.id.twitter);
+        favoriteToolBar = findViewById(R.id.favoriteToolBar);
+        favoriteToolBar.setImageDrawable(isFavorite?getDrawable(R.drawable.heart_filled):getDrawable(R.drawable.heart_outline));
 
-
-        // ActionBar code
-        ActionBar actionBar = getSupportActionBar();
         try {
-            setTitle(Html.fromHtml("<font color=\"#4CA327\">" + eventDetails.getString("name") + "</font>"));
+            eventToolbarTitle.setText(Html.fromHtml("<font color=\"#4CA327\">" + eventDetails.getString("name") + "</font>"));
+            eventToolbarTitle.setSelected(true);
+            greenBackButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    finish();
+                }
+            });
+            facebook.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent facebookIntent = null;
+                    try {
+                        facebookIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://facebook.com/sharer/sharer.php?u="+eventDetails.getString("url")));
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                    startActivity(facebookIntent);
+                }
+            });
+            twitter.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent twitterIntent = null;
+                    try {
+                        twitterIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/intent/tweet/?text=Check "+eventDetails.getString("name")+" on Ticketmaster.%0A"+eventDetails.getString("url")));
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                    startActivity(twitterIntent);
+                }
+            });
+            favoriteToolBar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("FavoriteList",0);
+                    SharedPreferences.Editor editor=sharedPreferences.edit();
+                    if(isFavorite){
+                        for(int i=0;i<favoriteArray.length();i++){
+                            try {
+                                if(favoriteArray.getJSONObject(i).getString("id").equals(eventDetails.getString("id"))){
+                                    favoriteArray.remove(i);
+                                    Utility.snackbarHelper(eventDetails.getString("name"), false, false);
+                                    break;
+                                }
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                        favoriteToolBar.setImageDrawable(getDrawable(R.drawable.heart_outline));
+                    }else{
+                        try {
+                            favoriteArray.put(eventDetails);
+                            favoriteToolBar.setImageDrawable(getDrawable(R.drawable.heart_filled));
+                            Utility.snackbarHelper(eventDetails.getString("name"), true, false);
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                    isFavorite = !isFavorite;
+                    editor.putString("FavoriteArray", favoriteArray.toString());
+                    editor.apply();
+                }
+            });
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
-        actionBar.setHomeAsUpIndicator(R.drawable.green_back_btn);
-        actionBar.setDisplayHomeAsUpEnabled(true);
 
 
 
@@ -131,89 +205,104 @@ public class EventDetails extends AppCompatActivity {
         viewPager.setAdapter(vpAdapter);
 
         tabLayout.getTabAt(0).setIcon(R.drawable.info_icon);
+        tabLayout.getTabAt(0).getIcon().setColorFilter(Color.parseColor("#4CA327"), PorterDuff.Mode.SRC_ATOP);
         tabLayout.getTabAt(1).setIcon(R.drawable.artist_icon);
         tabLayout.getTabAt(2).setIcon(R.drawable.venue_icon);
-//        tabLayout.getTabAt(0).setColorFilter
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                tab.getIcon().setColorFilter(Color.parseColor("#4CA327"), PorterDuff.Mode.SRC_ATOP);
+            }
 
-    }
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                tab.getIcon().setColorFilter(Color.parseColor("#ffffff"), PorterDuff.Mode.SRC_ATOP);
+            }
 
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        mainMenu = menu;
-        inflater.inflate(R.menu.my_options_menu, menu);
-        // return true so that the menu pop up is opened
-        return true;
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                tab.getIcon().setColorFilter(Color.parseColor("#4CA327"), PorterDuff.Mode.SRC_ATOP);
+            }
+        });
     }
+//
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        MenuInflater inflater = getMenuInflater();
+//        mainMenu = menu;
+//        inflater.inflate(R.menu.my_options_menu, menu);
+//        // return true so that the menu pop up is opened
+//        return true;
+//    }
 
     // this event will enable the back
     // function to the button on press
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                this.finish();
-                return true;
-            case R.id.facebook:
-                // User chose the "Facebook" item, show the app settings UI...
-                // method to redirect to provided link
-                Intent facebookIntent = null;
-                try {
-                    facebookIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://facebook.com/sharer/sharer.php?u="+eventDetails.getString("url")));
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
-                startActivity(facebookIntent);
-                return true;
-
-            case R.id.twitter:
-                // User chose the "Twitter" action, mark the current item
-                Intent twitterIntent = null;
-                try {
-                    twitterIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/intent/tweet/?text=Check "+eventDetails.getString("name")+" on Ticketmaster.%0A"+eventDetails.getString("url")));
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
-                startActivity(twitterIntent);
-                return true;
-
-            case R.id.favoriteMenu:
-                // User chose the "Twitter" action, mark the current item
-                SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("FavoriteList",0);
-                SharedPreferences.Editor editor=sharedPreferences.edit();
-                if(isFavorite){
-                    for(int i=0;i<favoriteArray.length();i++){
-                        try {
-                            if(favoriteArray.getJSONObject(i).getString("id").equals(eventDetails.getString("id"))){
-                                favoriteArray.remove(i);
-                                Utility.snackbarHelper(eventDetails.getString("name"), false, false);
-                                break;
-                            }
-                        } catch (JSONException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                    item.setIcon(R.drawable.heart_outline);
-                }else{
-                    try {
-                        favoriteArray.put(eventDetails);
-                        item.setIcon(R.drawable.heart_filled);
-                        Utility.snackbarHelper(eventDetails.getString("name"), true, false);
-                    } catch (JSONException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-                isFavorite = !isFavorite;
-                editor.putString("FavoriteArray", favoriteArray.toString());
-                editor.apply();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        invalidateOptionsMenu();
-        // Set favorite menu item
-        MenuItem item3 = menu.getItem(2);
-        item3.setIcon(isFavorite?R.drawable.heart_filled:R.drawable.heart_outline);
-        return super.onPrepareOptionsMenu(menu);
-    }
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//        switch (item.getItemId()) {
+//            case android.R.id.home:
+//                this.finish();
+//                return true;
+//            case R.id.facebook:
+//                // User chose the "Facebook" item, show the app settings UI...
+//                // method to redirect to provided link
+//                Intent facebookIntent = null;
+//                try {
+//                    facebookIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://facebook.com/sharer/sharer.php?u="+eventDetails.getString("url")));
+//                } catch (JSONException e) {
+//                    throw new RuntimeException(e);
+//                }
+//                startActivity(facebookIntent);
+//                return true;
+//
+//            case R.id.twitter:
+//                // User chose the "Twitter" action, mark the current item
+//                Intent twitterIntent = null;
+//                try {
+//                    twitterIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/intent/tweet/?text=Check "+eventDetails.getString("name")+" on Ticketmaster.%0A"+eventDetails.getString("url")));
+//                } catch (JSONException e) {
+//                    throw new RuntimeException(e);
+//                }
+//                startActivity(twitterIntent);
+//                return true;
+//
+//            case R.id.favoriteMenu:
+//                // User chose the "Twitter" action, mark the current item
+//                SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("FavoriteList",0);
+//                SharedPreferences.Editor editor=sharedPreferences.edit();
+//                if(isFavorite){
+//                    for(int i=0;i<favoriteArray.length();i++){
+//                        try {
+//                            if(favoriteArray.getJSONObject(i).getString("id").equals(eventDetails.getString("id"))){
+//                                favoriteArray.remove(i);
+//                                Utility.snackbarHelper(eventDetails.getString("name"), false, false);
+//                                break;
+//                            }
+//                        } catch (JSONException e) {
+//                            throw new RuntimeException(e);
+//                        }
+//                    }
+//                    item.setIcon(R.drawable.heart_outline);
+//                }else{
+//                    try {
+//                        favoriteArray.put(eventDetails);
+//                        item.setIcon(R.drawable.heart_filled);
+//                        Utility.snackbarHelper(eventDetails.getString("name"), true, false);
+//                    } catch (JSONException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                }
+//                isFavorite = !isFavorite;
+//                editor.putString("FavoriteArray", favoriteArray.toString());
+//                editor.apply();
+//                return true;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
+//    @Override
+//    public boolean onPrepareOptionsMenu(Menu menu) {
+//        invalidateOptionsMenu();
+//        // Set favorite menu item
+//        MenuItem item3 = menu.getItem(2);
+//        item3.setIcon(isFavorite?R.drawable.heart_filled:R.drawable.heart_outline);
+//        return super.onPrepareOptionsMenu(menu);
+//    }
 }

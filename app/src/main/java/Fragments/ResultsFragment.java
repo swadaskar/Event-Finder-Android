@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.eventsearch.R;
@@ -33,7 +34,8 @@ public class ResultsFragment extends Fragment implements SharedPreferences.OnSha
     RecyclerView recyclerView;
     JSONObject results;
     JSONArray favoriteArray;
-    TextView backToSearch, noResults;
+    TextView noResults;
+    LinearLayout backToSearch;
     Fragment previousSearchFragment;
 
     public ResultsFragment(JSONObject results, Fragment sf){
@@ -60,6 +62,7 @@ public class ResultsFragment extends Fragment implements SharedPreferences.OnSha
 
         // code for back button
         backToSearch = resultView.findViewById(R.id.backToSearch);
+//        backToSearch.setTextColor(Color.parseColor("#000000"));
         backToSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

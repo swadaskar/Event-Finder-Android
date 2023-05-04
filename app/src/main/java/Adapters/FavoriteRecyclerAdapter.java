@@ -22,6 +22,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 
 
@@ -94,13 +95,16 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
 
             viewHolder.eventName.setText(eventDetails.getString("name"));
             viewHolder.eventName.setSelected(true);
-            viewHolder.eventDate.setText(eventDetails.getJSONObject("dates").getJSONObject("start").getString("localDate"));
+            viewHolder.eventDate.setText(Utility.getAmericanDate(eventDetails.getJSONObject("dates").getJSONObject("start").getString("localDate")));
 
             viewHolder.venue.setText(eventDetails.getJSONObject("_embedded").getJSONArray("venues").getJSONObject(0).getString("name"));
-            viewHolder.eventTime.setText(eventDetails.getJSONObject("dates").getJSONObject("start").getString("localTime"));
+            viewHolder.venue.setSelected(true);
+            viewHolder.eventTime.setText(Utility.getTwelveHoursTime(eventDetails.getJSONObject("dates").getJSONObject("start").getString("localTime")));
 
             viewHolder.genre.setText(eventDetails.getJSONArray("classifications").getJSONObject(0).getJSONObject("segment").getString("name"));
         } catch (JSONException e) {
+            throw new RuntimeException(e);
+        } catch (ParseException e) {
             throw new RuntimeException(e);
         }
 

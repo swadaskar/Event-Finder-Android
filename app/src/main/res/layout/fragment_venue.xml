@@ -133,15 +133,25 @@
 
                 </TableLayout>
 
-                <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:tools="http://schemas.android.com/tools"
-                    android:id="@+id/maps"
-                    android:name="com.google.android.gms.maps.SupportMapFragment"
-                    android:layout_width="340dp"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/rounded_edges"
-                    android:gravity="center"
-                    tools:context=".MapsActivity" />
+                <androidx.cardview.widget.CardView
+                    android:layout_width="359dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:elevation="10dp"
+                    app:cardCornerRadius="10dp"
+                    android:layout_gravity="center">
+                    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                        xmlns:tools="http://schemas.android.com/tools"
+                        android:id="@+id/maps"
+                        android:name="com.google.android.gms.maps.SupportMapFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/rounded_edges"
+                        android:gravity="center"
+                        tools:context=".MapsActivity" />
+                </androidx.cardview.widget.CardView>
+
 
             </LinearLayout>
 

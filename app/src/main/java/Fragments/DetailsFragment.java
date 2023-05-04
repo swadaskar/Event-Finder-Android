@@ -18,12 +18,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.eventsearch.R;
+import com.example.eventsearch.Utility;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -105,8 +107,8 @@ public class DetailsFragment extends Fragment {
         artistName.setText(String.join(" | ",arrArtists));
         try {
             venueName.setText(eventDetails.getJSONObject("_embedded").getJSONArray("venues").getJSONObject(0).getString("name"));
-            date.setText(eventDetails.getJSONObject("dates").getJSONObject("start").getString("localDate"));
-            time.setText(eventDetails.getJSONObject("dates").getJSONObject("start").getString("localTime"));
+            date.setText(Utility.getAmericanWordDate(eventDetails.getJSONObject("dates").getJSONObject("start").getString("localDate")));
+            time.setText(Utility.getTwelveHoursTime(eventDetails.getJSONObject("dates").getJSONObject("start").getString("localTime")));
             genres.setText(String.join(" | ", filteredGenreFieldList));
             if(eventDetails.has("priceRanges")){
                 String priceRng = String.join("-",String.valueOf(eventDetails.getJSONArray("priceRanges").getJSONObject(0).getDouble("min")),
@@ -159,6 +161,8 @@ public class DetailsFragment extends Fragment {
 //            String url="https://maps.ticketmaster.com/maps/geometry/3/event/2C005D0F0E090CEB/staticImage?type=png&systemId=HOST";
 //            Picasso.get().load(url).into(seatMap);
         } catch (JSONException e) {
+            throw new RuntimeException(e);
+        } catch (ParseException e) {
             throw new RuntimeException(e);
         }
 

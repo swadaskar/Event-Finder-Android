@@ -144,7 +144,7 @@ public class VenueFragment extends Fragment implements OnMapReadyCallback {
         googleMap.addMarker(new MarkerOptions()
                 .position(venue)
                 .title("Venue Location"));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(venue,12f));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(venue,13f));
     }
 
     protected void setListener(TextView tv){
@@ -156,7 +156,6 @@ public class VenueFragment extends Fragment implements OnMapReadyCallback {
                     tv.setMaxLines(10);
                 }else{
                     tv.setMaxLines(3);
-//                    tv.setEllipsize(tv);
                 }
                 isSmall = !isSmall;
             }
