@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.AnimatedVectorDrawable;
+import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +35,8 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Map;
+
+import okhttp3.internal.Util;
 
 public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdapter.ViewHolder>{
     private String TAG = "EventRecyclerAdapter";
@@ -128,11 +132,12 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdap
             Picasso.get().load(eventDetails.getJSONArray("images").getJSONObject(0).getString("url")).into(viewHolder.icon);
 
             viewHolder.eventName.setText(eventDetails.getString("name"));
-            viewHolder.eventName.setSelected(true);
+            Utility.getMarquee(viewHolder.eventName);
+
             viewHolder.eventDate.setText(Utility.getAmericanDate(eventDetails.getJSONObject("dates").getJSONObject("start").getString("localDate")));
 
             viewHolder.venue.setText(eventDetails.getJSONObject("_embedded").getJSONArray("venues").getJSONObject(0).getString("name"));
-            viewHolder.venue.setSelected(true);
+            Utility.getMarquee(viewHolder.venue);
             viewHolder.eventTime.setText(Utility.getTwelveHoursTime(eventDetails.getJSONObject("dates").getJSONObject("start").getString("localTime")));
 
             viewHolder.genre.setText(eventDetails.getJSONArray("classifications").getJSONObject(0).getJSONObject("segment").getString("name"));
@@ -141,7 +146,6 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdap
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-        viewHolder.eventName.setSelected(true);
     }
 
     // Return the size of your dataset (invoked by the layout manager)

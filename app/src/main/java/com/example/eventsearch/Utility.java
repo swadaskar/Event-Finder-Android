@@ -2,6 +2,7 @@ package com.example.eventsearch;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -9,6 +10,8 @@ import android.widget.Toast;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.material.snackbar.Snackbar;
+
+import org.w3c.dom.Text;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -92,5 +95,19 @@ public class Utility {
         } else {
             return s + " Followers";
         }
+    }
+
+    public static void getMarquee(TextView tv){
+        tv.post(new Runnable() {
+            public void run() {
+                tv.setSingleLine(true);
+                tv.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+                tv.setMarqueeRepeatLimit(-1);
+                tv.setFocusable(true);
+                tv.setFocusableInTouchMode(true);
+                tv.setHorizontallyScrolling(true);
+                tv.setSelected(true);
+            }
+        });
     }
 }

@@ -3,6 +3,7 @@ package com.example.eventsearch;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
@@ -16,6 +17,7 @@ import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
@@ -24,6 +26,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
@@ -57,7 +60,8 @@ public class EventDetails extends AppCompatActivity {
     private Context context;
     private JSONArray favoriteArray;
     private JSONObject eventDetails;
-    private Menu mainMenu;
+    private ConstraintLayout eventDetailsLayout;
+    private ProgressBar loadingBarDetails;
     public static View eventView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -224,85 +228,20 @@ public class EventDetails extends AppCompatActivity {
                 tab.getIcon().setColorFilter(Color.parseColor("#4CA327"), PorterDuff.Mode.SRC_ATOP);
             }
         });
-    }
-//
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        MenuInflater inflater = getMenuInflater();
-//        mainMenu = menu;
-//        inflater.inflate(R.menu.my_options_menu, menu);
-//        // return true so that the menu pop up is opened
-//        return true;
-//    }
 
-    // this event will enable the back
-    // function to the button on press
-//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-//        switch (item.getItemId()) {
-//            case android.R.id.home:
-//                this.finish();
-//                return true;
-//            case R.id.facebook:
-//                // User chose the "Facebook" item, show the app settings UI...
-//                // method to redirect to provided link
-//                Intent facebookIntent = null;
-//                try {
-//                    facebookIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://facebook.com/sharer/sharer.php?u="+eventDetails.getString("url")));
-//                } catch (JSONException e) {
-//                    throw new RuntimeException(e);
-//                }
-//                startActivity(facebookIntent);
-//                return true;
-//
-//            case R.id.twitter:
-//                // User chose the "Twitter" action, mark the current item
-//                Intent twitterIntent = null;
-//                try {
-//                    twitterIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/intent/tweet/?text=Check "+eventDetails.getString("name")+" on Ticketmaster.%0A"+eventDetails.getString("url")));
-//                } catch (JSONException e) {
-//                    throw new RuntimeException(e);
-//                }
-//                startActivity(twitterIntent);
-//                return true;
-//
-//            case R.id.favoriteMenu:
-//                // User chose the "Twitter" action, mark the current item
-//                SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("FavoriteList",0);
-//                SharedPreferences.Editor editor=sharedPreferences.edit();
-//                if(isFavorite){
-//                    for(int i=0;i<favoriteArray.length();i++){
-//                        try {
-//                            if(favoriteArray.getJSONObject(i).getString("id").equals(eventDetails.getString("id"))){
-//                                favoriteArray.remove(i);
-//                                Utility.snackbarHelper(eventDetails.getString("name"), false, false);
-//                                break;
-//                            }
-//                        } catch (JSONException e) {
-//                            throw new RuntimeException(e);
-//                        }
-//                    }
-//                    item.setIcon(R.drawable.heart_outline);
-//                }else{
-//                    try {
-//                        favoriteArray.put(eventDetails);
-//                        item.setIcon(R.drawable.heart_filled);
-//                        Utility.snackbarHelper(eventDetails.getString("name"), true, false);
-//                    } catch (JSONException e) {
-//                        throw new RuntimeException(e);
-//                    }
-//                }
-//                isFavorite = !isFavorite;
-//                editor.putString("FavoriteArray", favoriteArray.toString());
-//                editor.apply();
-//                return true;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
-//    @Override
-//    public boolean onPrepareOptionsMenu(Menu menu) {
-//        invalidateOptionsMenu();
-//        // Set favorite menu item
-//        MenuItem item3 = menu.getItem(2);
-//        item3.setIcon(isFavorite?R.drawable.heart_filled:R.drawable.heart_outline);
-//        return super.onPrepareOptionsMenu(menu);
-//    }
+        eventDetailsLayout = findViewById(R.id.eventDetailsLayout);
+
+        // Put loading bar on
+        loadingBarDetails = findViewById(R.id.loadingBarDetails);
+        loadingBarDetails.setVisibility(View.VISIBLE);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                loadingBarDetails.setVisibility(View.GONE);
+                eventDetailsLayout.setVisibility(View.VISIBLE);
+            }
+        },800);
+
+    }
 }

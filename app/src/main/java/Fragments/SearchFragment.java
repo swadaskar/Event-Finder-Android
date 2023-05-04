@@ -139,7 +139,7 @@ public class SearchFragment extends Fragment {
                 editLocation.getText().clear();
                 editDistance.setText("10");
                 autokeyword.setText("");
-//                spinner.setSelection(spinnerPosition);
+                spinner.setSelection(0);
 //                Log.d("After clearing", String.format("key: %s and loc: %s",autokeyword.getText().toString(),editLocation.getText().toString()));
             }
         });
@@ -193,6 +193,12 @@ public class SearchFragment extends Fragment {
                             // goto results fragment
 
 //                            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//                            transaction.setCustomAnimations(
+//                                    R.anim.slide_in,  // enter
+//                                    R.anim.fade_out,  // exit
+//                                    R.anim.fade_in,   // popEnter
+//                                    R.anim.slide_out  // popExit
+//                            );
 //                            transaction.replace(R.id.root_frame, resultsFragment);
 //                            transaction.setTransition(FragmentTransaction.TRANSIT_NONE);
 //                            transaction.addToBackStack(null);       // support the Back key
@@ -202,6 +208,10 @@ public class SearchFragment extends Fragment {
                             Fragment sf = fm.findFragmentById(R.id.root_frame);
                             FragmentTransaction transaction = fm.beginTransaction();
                             ResultsFragment resultsFragment = new ResultsFragment(searchResults, sf);
+                            transaction.setCustomAnimations(
+                                    R.anim.fade_out,  // enter
+                                    R.anim.fade_in   // exit
+                            );
                             // always add new result fragment
                             transaction.add(R.id.root_frame, resultsFragment);
                             transaction.hide(sf);

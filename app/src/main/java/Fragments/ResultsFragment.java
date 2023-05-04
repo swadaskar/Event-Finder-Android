@@ -11,11 +11,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.TransitionInflater;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.eventsearch.R;
@@ -41,6 +43,7 @@ public class ResultsFragment extends Fragment implements SharedPreferences.OnSha
     JSONArray sortedResults = new JSONArray();
     JSONArray favoriteArray;
     TextView noResults;
+    ProgressBar loadingBarResults;
     LinearLayout backToSearch;
     Fragment previousSearchFragment;
 
@@ -81,6 +84,12 @@ public class ResultsFragment extends Fragment implements SharedPreferences.OnSha
                 // goto search fragment
 //                SearchFragment searchFragment = new SearchFragment();
 //                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//                transaction.setCustomAnimations(
+//                        R.anim.slide_in,  // enter
+//                        R.anim.fade_out,  // exit
+//                        R.anim.fade_in,   // popEnter
+//                        R.anim.slide_out  // popExit
+//                );
 //                transaction.replace(R.id.root_frame, previousSearchFragment);
 //                transaction.setTransition(FragmentTransaction.TRANSIT_NONE);
 //                transaction.addToBackStack(null);       // support the Back key
@@ -89,6 +98,10 @@ public class ResultsFragment extends Fragment implements SharedPreferences.OnSha
                 Fragment rf = fm.findFragmentById(R.id.root_frame);
                 Fragment sf = fm.findFragmentById(R.id.search_frame);
                 FragmentTransaction transaction = fm.beginTransaction();
+                transaction.setCustomAnimations(
+                        R.anim.fade_out,  // enter
+                        R.anim.fade_in   // exit
+                );
                 transaction.show(previousSearchFragment);
                 transaction.remove(rf);
                 transaction.setTransition(FragmentTransaction.TRANSIT_NONE);
@@ -117,6 +130,7 @@ public class ResultsFragment extends Fragment implements SharedPreferences.OnSha
                 sortedResults = sortSearchResults(results);
             }else{
                 noResults.setVisibility(View.VISIBLE);
+//                loadingBarResults.setVisibility(View.GONE);
             }
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -132,6 +146,20 @@ public class ResultsFragment extends Fragment implements SharedPreferences.OnSha
             throw new RuntimeException(e);
         }
         recyclerView.setAdapter(customAdapter);
+        recyclerView.setVisibility(View.GONE);
+
+        // Put loading bar on
+        loadingBarResults = resultView.findViewById(R.id.loadingBarResults);
+        loadingBarResults.setVisibility(View.VISIBLE);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                loadingBarResults.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+            }
+        },600);
 
         return resultView;
     }
@@ -156,6 +184,10 @@ public class ResultsFragment extends Fragment implements SharedPreferences.OnSha
                 throw new RuntimeException(e);
             }
 
+            // Put loading bar on
+            loadingBarResults = resultView.findViewById(R.id.loadingBarResults);
+            loadingBarResults.setVisibility(View.VISIBLE);
+
             // check if results are zero
             noResults = resultView.findViewById(R.id.noResults);
             noResults.setTextColor(Color.parseColor("#4CA327"));
@@ -164,12 +196,14 @@ public class ResultsFragment extends Fragment implements SharedPreferences.OnSha
                     noResults.setVisibility(View.GONE);
                 }else{
                     noResults.setVisibility(View.VISIBLE);
+                    loadingBarResults.setVisibility(View.GONE);
                 }
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
 
             recyclerView.setAdapter(customAdapter);
+            loadingBarResults.setVisibility(View.GONE);
         }
     }
 

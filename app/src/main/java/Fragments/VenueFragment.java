@@ -32,6 +32,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.eventsearch.R;
+import com.example.eventsearch.Utility;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -75,28 +76,28 @@ public class VenueFragment extends Fragment implements OnMapReadyCallback {
 
         try {
             venueName.setText(venueInfo.getString("name"));
-            venueName.setSelected(true);
+            Utility.getMarquee(venueName);
         } catch (JSONException e) {
 //            venueName.setVisibility(View.GONE);
             venueName.setText("N/A");
         }
         try {
             address.setText(venueInfo.getJSONObject("address").getString("line1"));
-            address.setSelected(true);
+            Utility.getMarquee(address);
         } catch (JSONException e) {
 //            address.setVisibility(View.GONE);
             address.setText("N/A");
         }
         try {
             cityState.setText(venueInfo.getJSONObject("city").getString("name")+", "+venueInfo.getJSONObject("state").getString("name"));
-            cityState.setSelected(true);
+            Utility.getMarquee(cityState);
         } catch (JSONException e) {
 //            cityState.setVisibility(View.GONE);
             cityState.setText("N/A");
         }
         try {
             contact.setText(venueInfo.getJSONObject("boxOfficeInfo").getString("phoneNumberDetail"));
-            contact.setSelected(true);
+            Utility.getMarquee(contact);
         } catch (JSONException e) {
 //            contact.setVisibility(View.GONE);
             contact.setText("N/A");
@@ -162,7 +163,7 @@ public class VenueFragment extends Fragment implements OnMapReadyCallback {
         googleMap.addMarker(new MarkerOptions()
                 .position(venue)
                 .title("Venue Location"));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(venue,13f));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(venue,14f));
     }
 
     protected void setListener(TextView tv){

@@ -106,21 +106,21 @@ public class DetailsFragment extends Fragment {
                 .collect(Collectors.toList());
 
         artistName.setText(String.join(" | ",arrArtists));
-        artistName.setSelected(true);
+        Utility.getMarquee(artistName);
         try {
             venueName.setText(eventDetails.getJSONObject("_embedded").getJSONArray("venues").getJSONObject(0).getString("name"));
-            venueName.setSelected(true);
+            Utility.getMarquee(venueName);
             date.setText(Utility.getAmericanWordDate(eventDetails.getJSONObject("dates").getJSONObject("start").getString("localDate")));
-            date.setSelected(true);
+            Utility.getMarquee(date);
             time.setText(Utility.getTwelveHoursTime(eventDetails.getJSONObject("dates").getJSONObject("start").getString("localTime")));
             genres.setText(String.join(" | ", filteredGenreFieldList));
-            genres.setSelected(true);
+            Utility.getMarquee(genres);
             if(eventDetails.has("priceRanges")){
                 String priceRng = String.join("-",String.valueOf(eventDetails.getJSONArray("priceRanges").getJSONObject(0).getDouble("min")),
                         String.valueOf(eventDetails.getJSONArray("priceRanges").getJSONObject(0).getDouble("max")))+" ("
                         +eventDetails.getJSONArray("priceRanges").getJSONObject(0).getString("currency")+")";
                 priceRange.setText(priceRng);
-                priceRange.setSelected(true);
+                Utility.getMarquee(priceRange);
             }
 
             String color, ticketStatusText;
@@ -150,7 +150,7 @@ public class DetailsFragment extends Fragment {
 
 
             ticketURL.setText(Html.fromHtml("<font color=\"#4CA327\"><u>"+eventDetails.getString("url")+"</u></font>"));
-            ticketURL.setSelected(true);
+            Utility.getMarquee(ticketURL);
             ticketURL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

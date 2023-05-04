@@ -98,11 +98,11 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
             Picasso.get().load(eventDetails.getJSONArray("images").getJSONObject(0).getString("url")).into(viewHolder.icon);
 
             viewHolder.eventName.setText(eventDetails.getString("name"));
-            viewHolder.eventName.setSelected(true);
+            Utility.getMarquee(viewHolder.eventName);
             viewHolder.eventDate.setText(Utility.getAmericanDate(eventDetails.getJSONObject("dates").getJSONObject("start").getString("localDate")));
 
             viewHolder.venue.setText(eventDetails.getJSONObject("_embedded").getJSONArray("venues").getJSONObject(0).getString("name"));
-            viewHolder.venue.setSelected(true);
+            Utility.getMarquee(viewHolder.venue);
             viewHolder.eventTime.setText(Utility.getTwelveHoursTime(eventDetails.getJSONObject("dates").getJSONObject("start").getString("localTime")));
 
             viewHolder.genre.setText(eventDetails.getJSONArray("classifications").getJSONObject(0).getJSONObject("segment").getString("name"));

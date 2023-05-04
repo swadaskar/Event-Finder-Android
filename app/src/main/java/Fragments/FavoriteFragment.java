@@ -3,10 +3,12 @@ package Fragments;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -34,6 +36,7 @@ public class FavoriteFragment extends Fragment implements SharedPreferences.OnSh
     ArrayList<JSONObject> favoriteList;
     FavoriteRecyclerAdapter customAdapter;
     TextView noFavorites;
+    ProgressBar loadingBarFavorite;
 
     @Override
     public void onStart(){
@@ -96,6 +99,19 @@ public class FavoriteFragment extends Fragment implements SharedPreferences.OnSh
         }
         recyclerView.setAdapter(customAdapter);
         recyclerView.setNestedScrollingEnabled(false);
+        recyclerView.setVisibility(View.GONE);
+
+        // Put loading bar on
+        loadingBarFavorite = favoriteView.findViewById(R.id.loadingBarFavorite);
+        loadingBarFavorite.setVisibility(View.VISIBLE);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                loadingBarFavorite.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+            }
+        },800);
 
         return favoriteView;
     }
