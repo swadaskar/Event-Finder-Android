@@ -72,7 +72,7 @@ public class ResultsFragment extends Fragment implements SharedPreferences.OnSha
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         resultView = inflater.inflate(R.layout.fragment_results, container, false);
-        Utility.toastCheckHelper(resultView.getContext(),"Inside results!");
+//        Utility.toastCheckHelper(resultView.getContext(),"Inside results!");
         Log.d("ResultFragment", "Inside Result Fragment");
 
         // code for back button
@@ -100,7 +100,9 @@ public class ResultsFragment extends Fragment implements SharedPreferences.OnSha
                 FragmentTransaction transaction = fm.beginTransaction();
                 transaction.setCustomAnimations(
                         R.anim.fade_out,  // enter
-                        R.anim.fade_in   // exit
+                        R.anim.fade_in,   // exit
+                        R.anim.slide_in,
+                        R.anim.slide_in// exit
                 );
                 transaction.show(previousSearchFragment);
                 transaction.remove(rf);

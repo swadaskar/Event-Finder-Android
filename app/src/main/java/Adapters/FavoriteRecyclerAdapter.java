@@ -14,6 +14,13 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.eventsearch.EventDetails;
 import com.example.eventsearch.R;
 import com.example.eventsearch.Utility;
 import com.squareup.picasso.Picasso;
@@ -42,6 +49,7 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
         SharedPreferences sharedPreferences = context.getSharedPreferences("FavoriteList",0);
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(Callback);
     }
+
     // Create new views (invoked by the layout manager)
     @Override
     public FavoriteRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
@@ -151,6 +159,144 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
         }
 
         @Override
-        public void onClick(View view) {}
+        public void onClick(View view) {
+            Intent eventDetailIntent = new Intent(context, EventDetails.class);
+//            context.startActivity(eventDetailIntent);
+
+            int eventPosition = getAdapterPosition();
+            try {
+                JSONObject event = localDataSet.get(eventPosition);
+                String EID = event.getString("id");
+                // Instantiate the RequestQueue.
+                RequestQueue queue = Volley.newRequestQueue(view.getContext());
+                String url = "https://api-dot-event-search-382200.uc.r.appspot.com/eventDetails?eventID="+EID;
+
+                // Request a string response from the provided URL.
+                StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                // Display the first 500 characters of the response string.
+                                try {
+                                    JSONObject eventDetails = new JSONObject(response);
+                                    Log.d(TAG+" details", eventDetails.toString());
+                                    eventDetailIntent.putExtra("Details",eventDetails.toString());
+
+                                    // find valid artists
+                                    ArrayList<String> musicArtists = getValidArtists(eventDetails);
+                                    Log.d(TAG+" musicartists", musicArtists.toString());
+                                    if(musicArtists.size()!=0){
+                                        eventDetailIntent.putStringArrayListExtra("Artists", musicArtists);
+//                                        for(int i=0;i<musicArtists.size();i++){
+//                                            boolean last = (i==musicArtists.size()-1);
+//                                            getArtistDetails(eventDetailIntent, musicArtists.get(i), last, eventDetails);
+//                                        }
+                                        getArtistDetails(eventDetailIntent, musicArtists, 0, eventDetails);
+
+                                    }else {
+                                        eventDetailIntent.putExtra("Artists", new ArrayList<JSONObject>());
+                                        getVenueDetails(eventDetailIntent, eventDetails);
+                                    }
+                                } catch (JSONException e) {
+                                    throw new RuntimeException(e);
+                                }
+
+                            }
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d(TAG, "Error in Event Detail call ");
+                    }
+                });
+
+                // Add the request to the RequestQueue.
+                queue.add(stringRequest);
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        protected ArrayList<String> getValidArtists(JSONObject eventDetails){
+            ArrayList<String> musicArtists = new ArrayList<>();
+            try {
+                JSONArray eventArtists = eventDetails.getJSONObject("_embedded").getJSONArray("attractions");
+                for(int i=0; i< eventArtists.length();i++){
+                    if(eventArtists.getJSONObject(i).getJSONArray("classifications").getJSONObject(0).getJSONObject("segment").getString("name").equals("Music")){
+                        musicArtists.add(eventArtists.getJSONObject(i).getString("name"));
+                    }
+                }
+            } catch (JSONException e) {
+//                throw new RuntimeException(e);
+            }
+            return musicArtists;
+        }
+        protected void getArtistDetails(Intent eventDetailIntent, ArrayList<String> musicArtists, int index, JSONObject eventDetails) {
+            String artistName = musicArtists.get(index);
+            // Instantiate the RequestQueue.
+            RequestQueue queue = Volley.newRequestQueue(context);
+            String url = "https://api-dot-event-search-382200.uc.r.appspot.com/artistDetails?artist="+artistName;
+
+            // Request a string response from the provided URL.
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            JSONObject artistInfo = null;
+                            try {
+                                artistInfo = new JSONObject(response);
+                                if(artistInfo.isNull("error")){
+                                    eventDetailIntent.putExtra(artistName, artistInfo.toString());
+                                    Log.d(TAG+" "+artistName, artistInfo.toString());
+                                }else{
+                                    Log.d(TAG+" "+artistName, "onResponse: got artist error");
+                                }
+                                if(index==musicArtists.size()-1){
+                                    getVenueDetails(eventDetailIntent, eventDetails);
+                                }else {
+                                    getArtistDetails(eventDetailIntent,musicArtists,index+1,eventDetails);
+                                }
+                            } catch (JSONException e) {
+//                                throw new RuntimeException(e);
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.d(TAG, String.format("Artist %s BAD response",artistName));
+                }
+            });
+
+            // Add the request to the RequestQueue.
+            queue.add(stringRequest);
+        }
+        protected void getVenueDetails(Intent eventDetailIntent, JSONObject eventDetails) throws JSONException {
+            String venueName = eventDetails.getJSONObject("_embedded").getJSONArray("venues").getJSONObject(0).getString("name");
+            // Instantiate the RequestQueue.
+            RequestQueue queue = Volley.newRequestQueue(context);
+            String url = "https://api-dot-event-search-382200.uc.r.appspot.com/venueDetails?keyword="+venueName;
+
+            // Request a string response from the provided URL.
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                JSONObject venueDetails = new JSONObject(response);
+                                eventDetailIntent.putExtra("Venue", venueDetails.toString());
+                                Log.d(TAG+" venue", venueDetails.toString());
+                                context.startActivity(eventDetailIntent);
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.d(TAG, "Venue BAD response");
+                }
+            });
+
+            // Add the request to the RequestQueue.
+            queue.add(stringRequest);
+        }
     }
 }

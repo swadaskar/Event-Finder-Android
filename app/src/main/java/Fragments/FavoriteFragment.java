@@ -11,8 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,7 +24,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import Adapters.EventRecyclerAdapter;
 import Adapters.FavoriteRecyclerAdapter;
@@ -37,11 +37,25 @@ public class FavoriteFragment extends Fragment implements SharedPreferences.OnSh
     FavoriteRecyclerAdapter customAdapter;
     TextView noFavorites;
     ProgressBar loadingBarFavorite;
+    @Override
+    public void onResume() {
+//        Handler handler = new Handler();
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                loadingBarFavorite.setVisibility(View.GONE);
+//                recyclerView.setVisibility(View.VISIBLE);
+//            }
+//        },800);
+        super.onResume();
+    }
 
     @Override
     public void onStart(){
         super.onStart();
+
         EventRecyclerAdapter.updateWhenAdded(favoriteView.getContext(), this);
+
     }
 
     @Override

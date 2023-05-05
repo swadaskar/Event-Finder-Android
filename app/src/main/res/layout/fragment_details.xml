@@ -12,17 +12,18 @@
 
         <LinearLayout
             android:id="@+id/cardView"
-            android:layout_width="353dp"
+            android:layout_width="363dp"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_edges"
             android:layout_gravity="center"
             android:orientation="vertical"
-            android:padding="10dp"
-            android:layout_marginTop="39sp">
+            android:padding="15dp"
+            android:layout_marginTop="40sp">
 
             <TableLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="#1D1D1D">
 
                 <TableRow
                     android:layout_width="match_parent"
@@ -39,7 +40,7 @@
 
                     <TextView
                         android:id="@+id/artistName"
-                        android:layout_width="10dp"
+                        android:layout_width="175dp"
                         android:layout_height="31dp"
                         android:layout_column="2"
                         android:ellipsize="marquee"
@@ -49,7 +50,7 @@
                         android:marqueeRepeatLimit="marquee_forever"
                         android:scrollHorizontally="true"
                         android:singleLine="true"
-                        android:text="TextView"
+                        android:text="N/A"
                         android:textColor="@color/appGreen"
                         android:textSize="20sp"/>
 
@@ -79,7 +80,7 @@
                         android:marqueeRepeatLimit="marquee_forever"
                         android:scrollHorizontally="true"
                         android:singleLine="true"
-                        android:text="TextView"
+                        android:text="N/A"
                         android:textColor="@color/appGreen"
                         android:gravity="center_horizontal"
                         android:textSize="20sp"/>
@@ -110,7 +111,7 @@
                         android:marqueeRepeatLimit="marquee_forever"
                         android:scrollHorizontally="true"
                         android:singleLine="true"
-                        android:text="TextView"
+                        android:text="N/A"
                         android:textColor="@color/appGreen"
                         android:gravity="center_horizontal"
                         android:textSize="20sp"/>
@@ -141,7 +142,7 @@
                         android:marqueeRepeatLimit="marquee_forever"
                         android:scrollHorizontally="true"
                         android:singleLine="true"
-                        android:text="TextView"
+                        android:text="N/A"
                         android:textColor="@color/appGreen"
                         android:gravity="center_horizontal"
                         android:textSize="20sp" />
@@ -172,7 +173,7 @@
                         android:marqueeRepeatLimit="marquee_forever"
                         android:scrollHorizontally="true"
                         android:singleLine="true"
-                        android:text="TextView"
+                        android:text="N/A"
                         android:textColor="@color/appGreen"
                         android:gravity="center_horizontal"
                         android:textSize="20sp" />
@@ -204,7 +205,7 @@
                         android:marqueeRepeatLimit="marquee_forever"
                         android:scrollHorizontally="true"
                         android:singleLine="true"
-                        android:text="TextView"
+                        android:text="N/A"
                         android:textColor="@color/appGreen"
                         android:gravity="center_horizontal"
                         android:textSize="20sp" />
@@ -246,7 +247,7 @@
                                 android:id="@+id/ticketStatus"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
-                                android:text="On Sale"
+                                android:text="N/A"
                                 android:paddingLeft="5sp"
                                 android:paddingRight="5sp"
                                 android:textColor="#FFFFFF"
@@ -282,7 +283,7 @@
                         android:marqueeRepeatLimit="marquee_forever"
                         android:scrollHorizontally="true"
                         android:singleLine="true"
-                        android:text="Ticket URL"
+                        android:text="Ticket URL N/A"
                         android:textColor="@color/appGreen"
                         android:gravity="center_horizontal"
                         android:textSize="20sp" />
@@ -297,7 +298,8 @@
                 android:layout_width="332dp"
                 android:layout_height="301dp"
                 android:layout_gravity="center"
-                tools:src="@tools:sample/avatars" />
+                tools:src="@tools:sample/avatars"
+                android:background="#1D1D1D"/>
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

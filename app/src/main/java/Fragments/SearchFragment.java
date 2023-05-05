@@ -72,18 +72,16 @@ public class SearchFragment extends Fragment {
         clearButton = rootView.findViewById(R.id.clearButton);
 
         // ** code for autoComplete
-        //Creating the instance of ArrayAdapter containing list of fruit names
         autoSuggestAdapter = new ArrayAdapter(rootView.getContext(), R.layout.autosuggest_popdown, R.id.autoSuggestElement, keywords);
-        //Getting the instance of AutoCompleteTextView
+
         autokeyword = (AutoCompleteTextView) rootView.findViewById(R.id.editKeyword);
-        autokeyword.setThreshold(1);//will start working from first character
-        autokeyword.setAdapter(autoSuggestAdapter);//setting the adapter data into the AutoCompleteTextView
+        autokeyword.setThreshold(1);// work from first character
+        autokeyword.setAdapter(autoSuggestAdapter); // custom styling in adapter
         autokeyword.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
             public void afterTextChanged(Editable s) {
-                retrieveData(s.toString());
+                getKeywords(s.toString());
             }
         });
 
@@ -116,9 +114,9 @@ public class SearchFragment extends Fragment {
             public void onClick(View view) {
                 Log.d("valid check", String.format("key: %s and loc: %s",autokeyword.getText().toString(),editLocation.getText().toString()));
                 if (autokeyword.getText().toString().isEmpty()){
-                    Utility.snackbarValidationHelper("Enter valid keyword!");
+                    Utility.snackbarValidationHelper("Please fill all fields");
                 } else if (!autoDetect.isChecked() && editLocation.getText().toString().isEmpty()){
-                    Utility.snackbarValidationHelper("Enter valid location!");
+                    Utility.snackbarValidationHelper("Please fill all fields");
                 }else {
                     if (autoDetect.isChecked()) {
                         getSearchResults();
@@ -210,7 +208,9 @@ public class SearchFragment extends Fragment {
                             ResultsFragment resultsFragment = new ResultsFragment(searchResults, sf);
                             transaction.setCustomAnimations(
                                     R.anim.fade_out,  // enter
-                                    R.anim.fade_in   // exit
+                                    R.anim.fade_in,
+                                    R.anim.slide_in,
+                                    R.anim.slide_in// exit
                             );
                             // always add new result fragment
                             transaction.add(R.id.root_frame, resultsFragment);
@@ -246,7 +246,8 @@ public class SearchFragment extends Fragment {
                             JSONObject geocoding = new JSONObject(response);
                             Log.d("geocoding status", geocoding.getString("status"));
                             if (!geocoding.getString("status").equals("OK")) {
-                                Utility.toastCheckHelper(rootView.getContext(), "Enter Correct Location");
+//                                Utility.toastCheckHelper(rootView.getContext(), "Enter Correct Location");
+                                Utility.snackbarValidationHelper("Enter Correct Location");
                             }
                             else {
                                 latlon = geocoding.getJSONArray("results").getJSONObject(0).getJSONObject("geometry").getJSONObject("location").getDouble("lat")
@@ -268,7 +269,7 @@ public class SearchFragment extends Fragment {
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
     }
-    protected void retrieveData(String s){
+    protected void getKeywords(String s){
         RequestQueue requestQueue;
         StringRequest stringRequest;
         // RequestQueue initialized
@@ -328,7 +329,7 @@ public class SearchFragment extends Fragment {
                             JSONObject ipInfo = new JSONObject(response);
                             //                    the param of String.split accept a regular expression.
                             latlon = ipInfo.getString("loc");
-                            Utility.toastCheckHelper(rootView.getContext(), String.format("Location %s",latlon));
+//                            Utility.toastCheckHelper(rootView.getContext(), String.format("Location %s",latlon));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -336,7 +337,8 @@ public class SearchFragment extends Fragment {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Utility.toastCheckHelper(rootView.getContext(), "Location Not Detected!");
+//                Utility.toastCheckHelper(rootView.getContext(), "Location Not Detected!");
+                Utility.snackbarValidationHelper("Location Not Detected!");
             }
         });
 

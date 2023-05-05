@@ -72,7 +72,7 @@
                     android:scrollHorizontally="true"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
-                    android:text="TextView"
+                    android:text="N/A"
                     android:textColor="#FFFFFF"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -83,7 +83,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="right|center_vertical"
-                    android:text="TextView"
+                    android:text="N/A"
                     android:textColor="#FFFFFF"
                     android:textStyle="italic" />
             </LinearLayout>
@@ -105,7 +105,7 @@
                     android:marqueeRepeatLimit="marquee_forever"
                     android:scrollHorizontally="true"
                     android:singleLine="true"
-                    android:text="TextView"
+                    android:text="N/A"
                     android:textColor="#FFFFFF"
                     android:textSize="16sp" />
 
@@ -115,7 +115,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="right|center_vertical"
-                    android:text="TextView"
+                    android:text="N/A"
                     android:textColor="#FFFFFF"
                     android:textSize="14sp"
                     android:textStyle="italic" />
@@ -128,7 +128,7 @@
 
                 <TextView
                     android:id="@+id/genref"
-                    android:layout_width="174dp"
+                    android:layout_width="197dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:ellipsize="marquee"
@@ -138,7 +138,7 @@
                     android:marqueeRepeatLimit="marquee_forever"
                     android:scrollHorizontally="true"
                     android:singleLine="true"
-                    android:text="TextView"
+                    android:text="N/A"
                     android:textColor="#FFFFFF"
                     android:textSize="16sp" />
 
@@ -148,7 +148,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="end"
-                    android:padding="8sp"
+                    android:paddingLeft="8sp"
                     android:src="@drawable/heart_outline" />
             </LinearLayout>
 

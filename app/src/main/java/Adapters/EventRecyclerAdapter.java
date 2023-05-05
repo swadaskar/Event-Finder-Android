@@ -82,16 +82,19 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdap
 
         // check if EID exists in favorite array
         Boolean[] isFavorite = {false};
-        for(int i=0;i<favoriteArray.length();i++){
-            try {
-                if(favoriteArray.getJSONObject(i).getString("id").equals(EID)){
-                    isFavorite[0]=true;
-                    break;
+        if(favoriteArray!=null){
+            for(int i=0;i<favoriteArray.length();i++){
+                try {
+                    if(favoriteArray.getJSONObject(i).getString("id").equals(EID)){
+                        isFavorite[0]=true;
+                        break;
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
                 }
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
             }
         }
+
 
         if(isFavorite[0]){
             viewHolder.favourite.setImageResource(R.drawable.heart_filled);
@@ -116,6 +119,9 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdap
                     viewHolder.favourite.setImageResource(R.drawable.heart_outline);
                     Utility.snackbarHelper(eventName, false, true);
                 }else{
+                    if(favoriteArray==null){
+                        favoriteArray = new JSONArray();
+                    }
                     favoriteArray.put(eventDetails);
                     viewHolder.favourite.setImageResource(R.drawable.heart_filled);
                     Utility.snackbarHelper(eventName, true, true);
@@ -282,7 +288,7 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<EventRecyclerAdap
                                     getArtistDetails(eventDetailIntent,musicArtists,index+1,eventDetails);
                                 }
                             } catch (JSONException e) {
-                                throw new RuntimeException(e);
+//                                throw new RuntimeException(e);
                             }
                         }
                     }, new Response.ErrorListener() {

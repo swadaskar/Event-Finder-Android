@@ -110,7 +110,7 @@ public class VenueFragment extends Fragment implements OnMapReadyCallback {
         } catch (JSONException e) {
 //            throw new RuntimeException(e);
         }
-//        Log.d(TAG, String.format("lat: %s & lon: %s",lat,lon));
+        Log.d(TAG, String.format("lat: %s & lon: %s",lat,lon));
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.maps);
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
